@@ -41,19 +41,37 @@ const iconos = [
 //datasets de prueba
 let productosMasComprados = [
     {
-        name: 'televisor',
+        name: 'Televisor 32"',
         img: './image 154.png',
         market: './image 113.png',
         price: 154000
     },
     {
-        name: 'televisor',
+        name: 'Televisor 32"',
         img: './image 154.png',
         market: './image 113.png',
         price: 154000
     },
     {
-        name: 'televisor',
+        name: 'Televisor 32"',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },
+    {
+        name: 'Televisor 32"',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },
+    {
+        name: 'Televisor 32"    ',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },
+    {
+        name: 'Televisor',
         img: './image 154.png',
         market: './image 113.png',
         price: 154000
@@ -62,6 +80,58 @@ let productosMasComprados = [
 
 let productosEnOferta = [
     {
+        name: 'televisor',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },
+    {
+        name: 'Televisor',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },
+    {
+        name: 'Televisor',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },
+    {
+        name: 'Televisor',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },
+    {
+        name: 'Televisor',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },
+    {
+        name: 'Televisor',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },{
+        name: 'Televisor',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },
+    {
+        name: 'Televisor',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },
+    {
+        name: 'televisor',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },{
         name: 'televisor',
         img: './image 154.png',
         market: './image 113.png',
@@ -112,16 +182,16 @@ function Home() {
                         <iframe
                             title="Ubicacion de usuario"
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d248.54949968614653!2d-74.08205488257842!3d4.631165082134345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9bd4d69adbbb%3A0x43b3f4913d00eb9a!2sPUNTO%202!5e0!3m2!1ses!2sco!4v1681592970729!5m2!1ses!2sco"
-                            style={{ width: '100%', height: 'auto', border: '0' }} allowFullScreen="" loading="lazy"
+                            style={{ width: '100%', height: '100%', border: '0' }} allowFullScreen="" loading="lazy"
                             referrerPolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                     <div className="rowElementContainer">
-                        <h3>Busca Productos cerca de ti</h3>
+                        <h1>Busca Productos cerca de ti</h1>
                         <div>
-                            <input type="text" placeholder="     ¿Qué estás buscando?" id="name" name="name" required minLength="4" maxLength="8" size="auto"></input>
+                            <input className='inputProductosCerca' type="text" placeholder="       ¿Qué lugar estás buscando?" id="name" name="name" required minLength="4" maxLength="8" size="auto"></input>
                         </div>
 
-                        <h3>Lo más comprado</h3>
+                        <h1>Lo más comprado</h1>
                         <div className="horizontalCardContainer">
                             {
                                 productosMasComprados.map((producto, indice) => {
@@ -140,8 +210,8 @@ function Home() {
                         </div>
                     </div>
                 </div>
-                <h2>Ofertas</h2>
-                <div className="horizontalCardContainer">
+                <h1>Ofertas</h1>
+                <div className="horizontalCardContainerOfertas">
                     {
                         productosEnOferta.map((producto, indice) => {
                             return (
