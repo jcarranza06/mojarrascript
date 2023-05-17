@@ -9,32 +9,32 @@ const iconos = [
         img: './image 134.svg'
     },
     {
-        name: 'Tecnologia',
-        img: './pc 1.svg'
+        name: 'Lacteos',
+        img: './leche.png'
     },
     {
-        name: 'Deporte',
-        img: './voley 1.svg'
+        name: 'Despensa',
+        img: './despensa.png'
     },
     {
-        name: 'Electro y Cocina',
-        img: './electro 1.svg'
+        name: 'Frutas y verduras',
+        img: './tomate.png'
     },
     {
-        name: 'Muebles',
-        img: './mueble 1.svg'
+        name: 'Licores',
+        img: './licor.png'
     },
     {
-        name: 'Bebes y Niños',
-        img: './bebe 1.svg'
+        name: 'Bebidas',
+        img: './bebida.png'
     },
     {
-        name: 'Mascotas',
-        img: './perro 1.svg'
+        name: 'Panaderia',
+        img: './pan.png'
     },
     {
-        name: 'Automobil',
-        img: './carro 1.svg'
+        name: 'Carnes',
+        img: './carne.png'
     },
 
 ]
@@ -218,7 +218,7 @@ function Home() {
                                 <div className="card producto" key={indice}>
                                     <img src={iconosFolder(producto.img)} alt=""></img>
                                     {producto.name}
-                                    <img src={iconosFolder(producto.market)} alt=""></img>
+                                    <img src={iconosFolder(producto.market)} width="50em" alt=""></img>
                                     <button>
                                         $ {producto.price}
                                     </button>

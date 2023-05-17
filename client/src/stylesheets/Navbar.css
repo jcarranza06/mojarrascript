@@ -4,12 +4,11 @@
   align-items: center;
   background: linear-gradient(90deg, #8C43E6 0%, #EF8D6D 100%);
   padding: 10px 30px;
-
+  height: 4.6em;
 }
 
 .navbar-logo img {
   height: 50px;
-  border-radius: 50%;
 }
 
 .navbar-menu img {
@@ -19,6 +18,7 @@
 
 .textCategorias {
   color: white;
+  font-family: 'Inter', 'sans-serif';
   font-weight: bold;
 }
 
@@ -46,11 +46,24 @@
 
 
 .navbar-search input[type="text"]::placeholder {
-  color: #6c6767;
+  
+  font-family: 'Inter', 'sans-serif';
+  font-weight: bold;
+  color: #000000;
   opacity: 0.8;
 }
 
+.usuarioText{
+  color: white;
+  font-size: 1.2em;
+  font-weight: 100;
+  padding-right: 1em;
+}
+
+
 .navbar-login button {
+  font-family: 'Inter', 'sans-serif';
+  font-weight: bold;
   background-color: #EF8D6D;
   color: #fff;
   text-decoration-line: underline;
@@ -58,7 +71,6 @@
   border-radius: 20px;
   padding: 10px 20px;
   font-size: 1rem;
-  font-weight: bold;
   letter-spacing: 1px;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -74,6 +86,7 @@
 }
 
 .navbar-carrito img {
+  padding-left: 1em;
   height: 50px;
   cursor: pointer;
 }
@@ -88,5 +101,8 @@
   }
   .navbar-user {
     display: block;
+  }
+  .navbar-logo{
+    display: none;
   }
 }
