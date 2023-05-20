@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import "../stylesheets/Navbar.css"; // import your navbar styles
 import logo from "../Logo.svg";
 import carrito from "../Iconos/Icons/carrito_compras.svg";
@@ -8,9 +8,12 @@ import usuarioImg from "../Iconos/Icons/usuario.svg";
 
 
 
-
 function Navbar() {
 
+  const [clicked, setClicked] = useState(false);
+  const handleClick = () => {
+    setClicked(!clicked);
+  }
 
   const urlParams = new URLSearchParams(window.location.search);
   const userId = urlParams.get('userId');
@@ -31,10 +34,27 @@ function Navbar() {
       <div className="navbar-logo">
         <img src={logo} alt="Logo" />
       </div>
-      <div className="navbar-menu">
+      {/* MENU HAMBURGUESA */}
+      <div clicked={clicked} handleClick={handleClick} onClick={handleClick} className="navbar-menu">
         <img src={menuHam} alt="menu hamburguesa" />
       </div>
       <div className="textCategorias">Categorías</div>
+      <div className={`categorias ${clicked ? 'active' : '' }`}>
+          <ul>Lista de compras</ul>
+          <ul>Historial</ul>
+          <hr></hr>
+          <li> Mercado </li>
+          <li> Lacteos </li>
+          <li> Despensa </li>
+          <li> Frutas y verduras </li>
+          <li> Licores </li>
+          <li> Bebidas </li>
+          <li> Panaderia </li>
+          <li> Carnes </li>
+      </div>
+      <div className={`bgMenu ${clicked ? 'active' : '' }`}></div>
+
+      {/* SEARCH */}
       <div className="navbar-search">
         <input type="text" placeholder="¿Qué estas buscando?" />
       </div>
