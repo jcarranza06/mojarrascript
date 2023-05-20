@@ -10,10 +10,23 @@ import usuarioImg from "../Iconos/Icons/usuario.svg";
 
 function Navbar() {
 
+  // Hook para manejar el click del menu hamburguesa
   const [clicked, setClicked] = useState(false);
   const handleClick = () => {
     setClicked(!clicked);
   }
+
+  // Hook para el manejo del click de ver perfil
+  const [clickedPerfil, setClickedPerfil] = useState(false);
+  const handleClickPerfil = () => {
+    setClickedPerfil(!clickedPerfil);
+  }
+
+  if(clicked===true && clickedPerfil===true){
+    setClickedPerfil(!clickedPerfil);
+    setClicked(!clicked);
+  }
+  
 
   const urlParams = new URLSearchParams(window.location.search);
   const userId = urlParams.get('userId');
@@ -73,7 +86,17 @@ function Navbar() {
       {/* hasta aca va el fragmento de codigo */}
 
 
-      {userName === null ? ( <div> <img src={ userPicture } alt=""  /> </div> ) : ( <div> <img width='50em' src={userPicture} alt="imagen del usuario"/> </div> )}
+      {/* FRAGMENTO DE CODIGO: VERIFICA SI EL USUARIO ESTA REGISTRADO PARA PONER LA IMAGEN DE ÉL O NO */}
+      {userName === null ? ( <div> <img src={ userPicture } alt=""  /> </div> ) : ( 
+
+      <div className="userPicture"> 
+        <img clickedPerfil={clickedPerfil} handleClickPerfil={handleClickPerfil} onClick={handleClickPerfil} width='50em' src={userPicture} alt="imagen del usuario"/> 
+        <div className={`perfil ${clickedPerfil ? 'active' : '' }`}>
+          <ul>Modificar cuenta</ul>
+          <ul>Ajustes</ul>
+        </div>
+
+      </div> )}
       {userName === null && <div className="navbar-user">
         <img src={usuarioImg} alt="usuario icono" onClick={() => (window.location.href = "http://localhost:5000/login")}/>
       </div>}

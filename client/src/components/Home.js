@@ -1,6 +1,9 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 import "../stylesheets/Home.css"; // import your navbar styles
+import prev from "../Iconos/Icons/prev.png";
+import next from "../Iconos/Icons/next.png";
+
 
 const iconosFolder = require.context("../Iconos", true)
 const iconos = [ 
@@ -44,7 +47,7 @@ let productosMasComprados = [
         name: 'Televisor 32"',
         img: './image 154.png',
         market: './image 113.png',
-        price: 154000
+        price: 170000
     },
     {
         name: 'Televisor 32"',
@@ -56,25 +59,25 @@ let productosMasComprados = [
         name: 'Televisor 32"',
         img: './image 154.png',
         market: './image 113.png',
-        price: 154000
+        price: 217500
     },
     {
         name: 'Televisor 32"',
         img: './image 154.png',
         market: './image 113.png',
-        price: 154000
+        price: 218500
     },
     {
         name: 'Televisor 32"    ',
         img: './image 154.png',
         market: './image 113.png',
-        price: 154000
+        price: 219500
     },
     {
         name: 'Televisor',
         img: './image 154.png',
         market: './image 113.png',
-        price: 154000
+        price: 200500
     }
 ]
 
@@ -159,6 +162,17 @@ function addStylesheet(url) {
   }
 
 function Home() {
+
+    const [scrollAmount, setScrollAmount] = useState(0);
+
+    const handleScroll = (scrollOffset) => {
+    const container = document.querySelector('.horizontalCardContainer.mas');
+    const newScrollAmount = scrollAmount + scrollOffset;
+    container.scrollLeft = newScrollAmount;
+    setScrollAmount(newScrollAmount);
+
+  };
+
     return (
         <div className="home">
             {addStylesheet("https://fonts.googleapis.com/css2?family=Inter:wght@100&display=swap")}
@@ -192,7 +206,9 @@ function Home() {
                         </div>
 
                         <h1>Lo más comprado</h1>
-                        <div className="horizontalCardContainer">
+                        <div className='productosMasComprados'> 
+                        <img onClick={() => handleScroll(-300)} className='imagenPrev' src={prev} alt="flecha correr hacia " width="20rem" height="20rem" />
+                        <div className="horizontalCardContainer mas" style={{ overflowX: 'scroll', whiteSpace: 'nowrap' }}>
                             {
                                 productosMasComprados.map((producto, indice) => {
                                     return (
@@ -207,6 +223,8 @@ function Home() {
                                     );
                                 })
                             }
+                        </div>
+                        <img onClick={() => handleScroll(300)} className='imagenPrev' src={next} alt="flecha correr hacia " width="20rem" height="20rem" />
                         </div>
                     </div>
                 </div>

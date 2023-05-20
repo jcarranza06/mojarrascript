@@ -5,7 +5,20 @@
     align-content: center;
     justify-content: space-evenly;
     /* justify-items: baseline; */
-    overflow-x: auto;
+    overflow-x: scroll;
+    width: 100%;
+    font-style: bold;
+    /* flex-wrap: wrap; */
+}
+
+.horizontalCardContainer.mas {
+    margin-left: 10px;
+    margin-top: 1.7em;
+    display: flex;
+    align-content: center;
+    justify-content: space-evenly;
+    /* justify-items: baseline; */
+    overflow-x: scroll;
     width: 100%;
     font-style: bold;
     /* flex-wrap: wrap; */
@@ -160,6 +173,15 @@ h1 {
     border-width: 0px;
     border-radius: 20px;
 
+}
+
+.productosMasComprados{
+    display: flex;
+}
+
+.imagenPrev {
+    padding-top: 10rem;
+    cursor: pointer;
 }
 
 @media (max-width: 1024px) {

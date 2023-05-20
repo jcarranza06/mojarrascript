@@ -13,7 +13,7 @@
 }
 
 .navbar-menu img {
-  padding-left: 3rem;
+  padding-left: 0rem;
   height: 30px;
   cursor: pointer;
 }
@@ -145,6 +145,36 @@ hr {
   cursor: pointer;
 }
 
+.userPicture {
+  cursor: pointer;
+}
+
+.perfil{
+  position: absolute;
+  top: -700px;
+  left: -2000px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;  
+}
+
+.perfil.active{
+  margin: 0;
+  width: 100px;
+  height: 10rem;
+  display: block;
+  position: absolute;
+  margin-left: auto;
+  margin-right: 5rem;
+  top: 6em;
+  padding-top: 1em;
+  padding-right: 10rem;
+  right: 0;
+  left: 0;
+  text-align: left;
+  background: linear-gradient(90deg, #8C43E6 0%, #EF8D6D 100%);
+}
+
 .navbar-carrito img {
   padding-left: 1em;
   height: 50px;
@@ -170,6 +200,11 @@ hr {
 @media (min-width: 768px) {
   .categorias.active {
     margin: 0;
-    width: 768px;
+    width: 550px;
+    height: 40rem;
+  }
+
+  .perfil.active {
+    width: 100px;
   }
 }
