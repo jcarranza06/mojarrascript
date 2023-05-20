@@ -1,6 +1,10 @@
+// le agregué hooks useState y useEffect
 import React, { useState, useEffect } from 'react';
 
 import "../stylesheets/Home.css"; // import your navbar styles
+import prev from "../Iconos/Icons/prev.png";
+import next from "../Iconos/Icons/next.png";
+
 
 const iconosFolder = require.context("../Iconos", true)
 
@@ -10,38 +14,129 @@ const iconos = [
         img: './image 134.svg'
     },
     {
-        name: 'Tecnologia',
-        img: './pc 1.svg'
+        name: 'Lacteos',
+        img: './leche.png'
     },
     {
-        name: 'Deporte',
-        img: './voley 1.svg'
+        name: 'Despensa',
+        img: './despensa.png'
     },
     {
-        name: 'Electro y Cocina',
-        img: './electro 1.svg'
+        name: 'Frutas y verduras',
+        img: './tomate.png'
     },
     {
-        name: 'Muebles',
-        img: './mueble 1.svg'
+        name: 'Licores',
+        img: './licor.png'
     },
     {
-        name: 'Bebes y Niños',
-        img: './bebe 1.svg'
+        name: 'Bebidas',
+        img: './bebida.png'
     },
     {
-        name: 'Mascotas',
-        img: './perro 1.svg'
+        name: 'Panaderia',
+        img: './pan.png'
     },
     {
-        name: 'Automobil',
-        img: './carro 1.svg'
+        name: 'Carnes',
+        img: './carne.png'
     },
 
 ]
 //datasets de prueba
 let productosMasComprados = [
     {
+        name: 'Televisor 32"',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 170000
+    },
+    {
+        name: 'Televisor 32"',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },
+    {
+        name: 'Televisor 32"',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 217500
+    },
+    {
+        name: 'Televisor 32"',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 218500
+    },
+    {
+        name: 'Televisor 32"    ',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 219500
+    },
+    {
+        name: 'Televisor',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 200500
+    }
+]
+
+let productosEnOferta = [
+    {
+        name: 'televisor',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },
+    {
+        name: 'Televisor',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },
+    {
+        name: 'Televisor',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },
+    {
+        name: 'Televisor',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },
+    {
+        name: 'Televisor',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },
+    {
+        name: 'Televisor',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },{
+        name: 'Televisor',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },
+    {
+        name: 'Televisor',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },
+    {
+        name: 'televisor',
+        img: './image 154.png',
+        market: './image 113.png',
+        price: 154000
+    },{
         name: 'televisor',
         img: './image 154.png',
         market: './image 113.png',
@@ -71,6 +166,7 @@ function addStylesheet(url) {
 }
 
 function Home() {
+/*
     const [productosEnOferta, setProductosEnOferta] = useState([]);
     function getProductosEnOferta() {
         // configuracion para la petición
@@ -82,16 +178,17 @@ function Home() {
         ejemplo de peticion con parametros por GET:
 
         ej: http://localhost:5000/getProductosEnOferta?variable1=valorDeVariable&variable2=ValordeVariable2
-        let url = new URL ("http://localhost:5000/getProductosEnOferta");
-        url.searchParams.append("nombreVariable", valorVariable);  // aca seagregan la variableas a poner en la consulta 
-        fetch(url, options) // se hace la consulta 
-            .then(response => response.text()) // se obtiene el cuerpo de la respuesta
-            .then(data => {
-                const json = JSON.parse(data);// se pasa la respuesta de string json a objeto de javascript
-                console.log(json);
-                setProductosEnOferta(json); // funcion del useState
-            });
+        (de ejemplo) let url = new URL ("http://localhost:5000/getProductosEnOferta");
+        (de ejemplo)url.searchParams.append("nombreVariable", valorVariable);  // aca seagregan la variableas a poner en la consulta 
+        (de ejemplo)fetch(url, options) // se hace la consulta 
+        (de ejemplo)    .then(response => response.text()) // se obtiene el cuerpo de la respuesta
+        (de ejemplo)    .then(data => {
+        (de ejemplo)        const json = JSON.parse(data);// se pasa la respuesta de string json a objeto de javascript
+        (de ejemplo)        console.log(json);
+        (de ejemplo)        setProductosEnOferta(json); // funcion del useState
+        (de ejemplo)    });
         */
+  /*
         // Petición HTTP, consulta api y devuelve el body 
         let url = new URL ("http://localhost:5000/getProductosEnOferta");
         fetch(url, options) // se hace la consulta 
@@ -107,6 +204,17 @@ function Home() {
         getProductosEnOferta();
     }, []);
     //setProductosEnOferta(prods);
+    */
+
+    const [scrollAmount, setScrollAmount] = useState(0);
+
+    const handleScroll = (scrollOffset) => {
+    const container = document.querySelector('.horizontalCardContainer.mas');
+    const newScrollAmount = scrollAmount + scrollOffset;
+    container.scrollLeft = newScrollAmount;
+    setScrollAmount(newScrollAmount);
+
+  };
 
     return (
         <div className="home">
@@ -140,8 +248,10 @@ function Home() {
                             <input type="text" placeholder="     ¿Qué estás buscando?" id="name" name="name" required minLength="4" maxLength="8" size="auto"></input>
                         </div>
 
-                        <h3>Lo más comprado</h3>
-                        <div className="horizontalCardContainer">
+                        <h1>Lo más comprado</h1>
+                        <div className='productosMasComprados'> 
+                        <img onClick={() => handleScroll(-300)} className='imagenPrev' src={prev} alt="flecha correr hacia " width="20rem" height="20rem" />
+                        <div className="horizontalCardContainer mas" style={{ overflowX: 'scroll', whiteSpace: 'nowrap' }}>
                             {
                                 productosMasComprados.map((producto, indice) => {
                                     return (
@@ -157,6 +267,8 @@ function Home() {
                                 })
                             }
                         </div>
+                        <img onClick={() => handleScroll(300)} className='imagenPrev' src={next} alt="flecha correr hacia " width="20rem" height="20rem" />
+                        </div>
                     </div>
                 </div>
                 <h2>Ofertas</h2>
@@ -170,7 +282,9 @@ function Home() {
                                 <div className="card producto" key={indice}>
                                     <img src={producto.img} alt=""></img>
                                     {producto.name}
-                                    <span>{producto.NOMBRESUPERMERCADO}</span>
+
+                                    <img src={iconosFolder(producto.market)} width="50em" alt=""></img>
+
                                     <button>
                                         $ {producto.precio}
                                     </button>

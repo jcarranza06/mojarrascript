@@ -36,9 +36,25 @@ app.listen(5000, () => {
   console.log("Servidor iniciado en el puerto 5000");
 });
 
+/*
+porfa verifique que funciona correctamente 
+*/
 app.get('/', (req, res) => {
+  if (req.oidc.isAuthenticated()) {
+    // Acceder a los datos del usuario autenticado
+    const user = req.oidc.user;
 
-  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+    // Extraer información específica del usuario
+    const userId = user.sub; // ID del usuario
+    const userName = user.name; // Nombre del usuario
+    const userEmail = user.email; // Email del usuario
+    const userPicture = user.picture; // URL de la imagen del usuario
+
+    // Redirigir al usuario a localhost:3000 con los datos del usuario como parámetros de consulta
+    res.redirect(`http://localhost:3000/?userId=${userId}&userName=${userName}&userEmail=${userEmail}&userPicture=${userPicture}`);
+  } else {
+    res.send('Log in');
+  }
 });
 
 
@@ -88,3 +104,4 @@ app.get('/getProductosEnOferta', (req, res) => {
     });
   });
 });
+
