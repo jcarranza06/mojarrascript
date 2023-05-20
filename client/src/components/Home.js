@@ -1,4 +1,5 @@
-import React, {useState} from 'react'
+// le agregué hooks useState y useEffect
+import React, { useState, useEffect } from 'react';
 
 import "../stylesheets/Home.css"; // import your navbar styles
 import prev from "../Iconos/Icons/prev.png";
@@ -6,7 +7,8 @@ import next from "../Iconos/Icons/next.png";
 
 
 const iconosFolder = require.context("../Iconos", true)
-const iconos = [ 
+
+const iconos = [
     {
         name: 'Mercado',
         img: './image 134.svg'
@@ -154,14 +156,55 @@ let productosEnOferta = [
     }
 ]
 
+//getProductosEnOferta();
+
 function addStylesheet(url) {
     const link = document.createElement('link');
     link.href = url;
     link.rel = 'stylesheet';
     document.head.appendChild(link);
-  }
+}
 
 function Home() {
+/*
+    const [productosEnOferta, setProductosEnOferta] = useState([]);
+    function getProductosEnOferta() {
+        // configuracion para la petición
+        const options = {
+            method: "GET"
+        };
+        /*
+        ///////////////////////////////////////////////////////////////////////////
+        ejemplo de peticion con parametros por GET:
+
+        ej: http://localhost:5000/getProductosEnOferta?variable1=valorDeVariable&variable2=ValordeVariable2
+        (de ejemplo) let url = new URL ("http://localhost:5000/getProductosEnOferta");
+        (de ejemplo)url.searchParams.append("nombreVariable", valorVariable);  // aca seagregan la variableas a poner en la consulta 
+        (de ejemplo)fetch(url, options) // se hace la consulta 
+        (de ejemplo)    .then(response => response.text()) // se obtiene el cuerpo de la respuesta
+        (de ejemplo)    .then(data => {
+        (de ejemplo)        const json = JSON.parse(data);// se pasa la respuesta de string json a objeto de javascript
+        (de ejemplo)        console.log(json);
+        (de ejemplo)        setProductosEnOferta(json); // funcion del useState
+        (de ejemplo)    });
+        */
+  /*
+        // Petición HTTP, consulta api y devuelve el body 
+        let url = new URL ("http://localhost:5000/getProductosEnOferta");
+        fetch(url, options) // se hace la consulta 
+            .then(response => response.text()) // se obtiene el cuerpo de la respuesta
+            .then(data => {
+                const json = JSON.parse(data);// se pasa la respuesta de string json a objeto de javascript
+                console.log(json);
+                setProductosEnOferta(json); // funcion del useState
+            });
+    }
+    // se usa useEffect((),[]) sin parametros para solo hacer una vez la consulta a la BD, no se debe hacer cada vez que se renderice
+    useEffect(() => {
+        getProductosEnOferta();
+    }, []);
+    //setProductosEnOferta(prods);
+    */
 
     const [scrollAmount, setScrollAmount] = useState(0);
 
@@ -196,13 +239,13 @@ function Home() {
                         <iframe
                             title="Ubicacion de usuario"
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d248.54949968614653!2d-74.08205488257842!3d4.631165082134345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9bd4d69adbbb%3A0x43b3f4913d00eb9a!2sPUNTO%202!5e0!3m2!1ses!2sco!4v1681592970729!5m2!1ses!2sco"
-                            style={{ width: '100%', height: '100%', border: '0' }} allowFullScreen="" loading="lazy"
+                            style={{ width: '100%', height: 'auto', border: '0' }} allowFullScreen="" loading="lazy"
                             referrerPolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                     <div className="rowElementContainer">
-                        <h1>Busca Productos cerca de ti</h1>
+                        <h3>Busca Productos cerca de ti</h3>
                         <div>
-                            <input className='inputProductosCerca' type="text" placeholder="       ¿Qué lugar estás buscando?" id="name" name="name" required minLength="4" maxLength="8" size="auto"></input>
+                            <input type="text" placeholder="     ¿Qué estás buscando?" id="name" name="name" required minLength="4" maxLength="8" size="auto"></input>
                         </div>
 
                         <h1>Lo más comprado</h1>
@@ -228,21 +271,27 @@ function Home() {
                         </div>
                     </div>
                 </div>
-                <h1>Ofertas</h1>
-                <div className="horizontalCardContainerOfertas">
+                <h2>Ofertas</h2>
+                <div className="horizontalCardContainer">
                     {
-                        productosEnOferta.map((producto, indice) => {
-                            return (
+                        (productosEnOferta === 0 ? (
+                            <p>Cargando ...</p> // en caso que no haya cargado 
+                        ) : (
+                            productosEnOferta.map((producto, indice) => // se recorre el arreglo para mostrar los elementos
+                                (
                                 <div className="card producto" key={indice}>
-                                    <img src={iconosFolder(producto.img)} alt=""></img>
+                                    <img src={producto.img} alt=""></img>
                                     {producto.name}
+
                                     <img src={iconosFolder(producto.market)} width="50em" alt=""></img>
+
                                     <button>
-                                        $ {producto.price}
+                                        $ {producto.precio}
                                     </button>
                                 </div>
-                            );
-                        })
+                                )
+                            )
+                        ))
                     }
                 </div>
             </div>

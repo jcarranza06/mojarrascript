@@ -151,6 +151,9 @@ h1 {
     margin: 10px;
 
 }
+.card.producto img{
+    max-width: 100px;
+}
 
 .card.producto button {
     border-bottom: solid;
