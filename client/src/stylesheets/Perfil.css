@@ -17,7 +17,7 @@
   margin: 0px;
   padding: 20px;
   display: flex;
-  width: 638px;
+  width: 530px;
   height: 191px;
   align-items: center;
   box-shadow: 1px 10px 10px 2px rgb(0 0 0 / 20%);
@@ -46,7 +46,7 @@
 .infoPerfil {
   margin: 0px;
   padding: 20px;
-  width: 638px;
+  width: 530px;
   height: 300px;
   align-items: normal;
   box-shadow: 1px 10px 10px 2px rgb(0 0 0 / 20%);
@@ -68,7 +68,7 @@
   grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
   gap: 1rem 1rem;
   box-sizing: border-box;
-  width: 638px;
+  width: 100%;
 } 
 
 .Nombre p {
@@ -86,6 +86,7 @@
 .showhide1 {
   padding: 0 auto;
   margin: 0 auto;
+  margin-left: -50px;
   display: grid;
   align-items: normal;
   grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
@@ -108,7 +109,7 @@
   grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
   gap: 1rem 1rem;
   box-sizing: border-box;
-  width: 638px;
+  width: 100%;
 } 
 
 .Direccion p {
@@ -132,6 +133,7 @@
   gap: 1rem 1rem;
   box-sizing: border-box;
   width: 200px;
+  margin-left: -50px;
 }
 
 .cambioDireccion {
@@ -148,7 +150,7 @@
   grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
   gap: 1rem 1rem;
   box-sizing: border-box;
-  width: 638px;
+  width: 100%;
 } 
 
 .Ciudad p {
@@ -172,6 +174,7 @@
   gap: 1rem 1rem;
   box-sizing: border-box;
   width: 200px;
+  margin-left: -50px;
 }
 
 .cambioCiudad {
@@ -188,7 +191,7 @@
   grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
   gap: 1rem 1rem;
   box-sizing: border-box;
-  width: 638px;
+  width: 100%;
 } 
 
 .Departamento p {
@@ -212,11 +215,9 @@
   gap: 1rem 1rem;
   box-sizing: border-box;
   width: 200px;
+  margin-left: -50px;
 }
 
 .cambioDepartamento {
   width: 100px;
 }
-
-
-
