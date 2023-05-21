@@ -11,6 +11,7 @@
     /* flex-wrap: wrap; */
 }
 
+
 .horizontalCardContainer.mas {
     margin-left: 10px;
     margin-top: 1.7em;
@@ -170,7 +171,20 @@ h1 {
     border-width: 0px;
 }
 
+.inputProductosCerca {
+    width: 90%;
+    height: 3em;
+    justify-content: center;
+    padding-left: 2em;
+    color: #000000;
+    font-size: 1em;
+}
 
+.inputProductosCerca input[type="text"] {
+    letter-spacing: 1px;
+    background-color: #ffffff;
+    color: #000000;
+}
 
 .rowElementContainer input {
     border-width: 0px;
