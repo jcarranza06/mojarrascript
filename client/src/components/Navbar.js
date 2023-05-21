@@ -48,7 +48,7 @@ function Navbar() {
         <img src={logo} alt="Logo" />
       </div>
       {/* MENU HAMBURGUESA */}
-      <div clicked={clicked} handleClick={handleClick} onClick={handleClick} className="navbar-menu">
+      <div onClick={handleClick} className="navbar-menu">
         <img src={menuHam} alt="menu hamburguesa" />
       </div>
       <div className="textCategorias">Categorías</div>

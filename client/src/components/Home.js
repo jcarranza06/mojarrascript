@@ -42,46 +42,7 @@ const iconos = [
         img: './carne.png'
     },
 
-]
-//datasets de prueba
-let productosMasComprados = [
-    {
-        name: 'Televisor 32"',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 170000
-    },
-    {
-        name: 'Televisor 32"',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },
-    {
-        name: 'Televisor 32"',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 217500
-    },
-    {
-        name: 'Televisor 32"',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 218500
-    },
-    {
-        name: 'Televisor 32"    ',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 219500
-    },
-    {
-        name: 'Televisor',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 200500
-    }
-]
+];
 
 //getProductosEnOferta();
 
@@ -94,6 +55,7 @@ function addStylesheet(url) {
 
 function Home() {
 
+    // PRODUCTOS EN OFERTA
     const [productosEnOferta, setProductosEnOferta] = useState([]);
     function getProductosEnOferta() {
         // configuracion para la petición
@@ -112,11 +74,34 @@ function Home() {
                 setProductosEnOferta(json); // funcion del useState
             });
     }
+
+    // PRODUCTOS MÁS VENDIDOS
+    const [productosMasVendidos,setProductosMasVendidos] = useState([]);
+    function getProductosMasVendidos() {
+        const options = {
+            method: "GET"
+        };
+
+        // Petición HTTP, consulta api y devuelve el body 
+        let url = new URL ("http://localhost:5000/getProductosMasVendidos");
+        fetch(url, options) // se hace la consulta 
+            .then(response => response.text()) // se obtiene el cuerpo de la respuesta
+            .then(data => {
+                const json = JSON.parse(data);// se pasa la respuesta de string json a objeto de javascript
+                console.log(json);
+                setProductosMasVendidos(json); // funcion del useState
+            });
+    }
+
     // se usa useEffect((),[]) sin parametros para solo hacer una vez la consulta a la BD, no se debe hacer cada vez que se renderice
     useEffect(() => {
         getProductosEnOferta();
     }, []);
     //setProductosEnOferta(prods);
+
+    useEffect(() => {
+        getProductosMasVendidos();
+    }, []);
   
 
     const [scrollAmount, setScrollAmount] = useState(0);
@@ -163,24 +148,30 @@ function Home() {
 
                         <h1>Lo más comprado</h1>
                         <div className='productosMasComprados'> 
-                        <img onClick={() => handleScroll(-300)} className='imagenPrev' src={prev} alt="flecha correr hacia " width="20rem" height="20rem" />
+                        <img onClick={() => handleScroll(-300)} className='imagenPrev' src={prev} alt="flecha correr hacia atras" width="20rem" height="20rem" />
                         <div className="horizontalCardContainer mas" style={{ overflowX: 'scroll', whiteSpace: 'nowrap' }}>
                             {
-                                productosMasComprados.map((producto, indice) => {
-                                    return (
-                                        <div className="card producto" key={indice}>
-                                            <img src={iconosFolder(producto.img)} alt=""></img>
-                                            {producto.name}
-                                            <img src={iconosFolder(producto.market)} alt=""></img>
-                                            <button>
-                                                $ {producto.price}
-                                            </button>
-                                        </div>
-                                    );
-                                })
-                            }
+                            (productosMasVendidos === 0 ? (
+                                <p>Cargando ...</p> // en caso que no haya cargado 
+                            ) : (
+                                productosMasVendidos.map((producto, indice) => // se recorre el arreglo para mostrar los elementos
+                                    (
+                                    <div className="card producto" key={indice}>
+                                        <img src={producto.imagen} alt=""></img>
+                                        {producto.nombre}
+
+                                        <span>{producto.supermercado}</span>
+
+                                        <button>
+                                            $ {producto.precio}
+                                        </button>
+                                    </div>
+                                    )
+                                )
+                            ))
+                        }
                         </div>
-                        <img onClick={() => handleScroll(300)} className='imagenPrev' src={next} alt="flecha correr hacia " width="20rem" height="20rem" />
+                        <img onClick={() => handleScroll(300)} className='imagenPrev' src={next} alt="flecha correr hacia adelante" width="20rem" height="20rem" />
                         </div>
                     </div>
                 </div>
