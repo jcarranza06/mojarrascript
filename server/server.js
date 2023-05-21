@@ -96,7 +96,7 @@ app.get('/getProductosMasVendidos', (req, res) => {
 
   con.connect(function(err) {// se abre la coneccion con la BD
     if (err) throw err; // validacion de apertura
-    con.query("SELECT * FROM producto order by CANTIDADVENDIDA desc limit 5", function (err, result, fields) { // se envía la petición a DB
+    con.query("SELECT IDPRODUCTO as id, NOMBREPRODUCTO as nombre,supermercado.NOMBRESUPERMERCADO as supermercado, PRECIOPRODUCTO as precio, DESCRIPCIONPRODUCTO as descricion, IMAGENPRODUCTO as imagen FROM `producto` JOIN supermercado WHERE supermercado.IDSUPERMERCADO = producto.IDSUPERMERCADO order by CANTIDADVENDIDA desc limit 5;", function (err, result, fields) { // se envía la petición a DB
       if (err) throw err; // valida peticion enviada corrrectamente
       res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
     });
