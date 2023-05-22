@@ -4,7 +4,7 @@ import logo from "../Logo.svg";
 import carrito from "../Iconos/Icons/carrito_compras.svg";
 import menuHam from "../Iconos/Icons/menu_hamburguesa.svg";
 import usuarioImg from "../Iconos/Icons/usuario.svg";
-
+import { Outlet, Link } from "react-router-dom";
 
 
 
@@ -45,7 +45,9 @@ function Navbar() {
     <nav className="navbar">
 
       <div className="navbar-logo">
-        <img src={logo} alt="Logo" />
+        <Link to="/">
+          <img src={logo} alt="Logo" />
+        </Link>
       </div>
       {/* MENU HAMBURGUESA */}
       <div onClick={handleClick} className="navbar-menu">
@@ -90,9 +92,11 @@ function Navbar() {
       {userName === null ? ( <div> <img src={ userPicture } alt=""  /> </div> ) : ( 
 
       <div className="userPicture"> 
-        <img clickedPerfil={clickedPerfil} handleClickPerfil={handleClickPerfil} onClick={handleClickPerfil} width='50em' src={userPicture} alt="imagen del usuario"/> 
+        {/*se borran atributos clickedPerfil y handleClickPerfil por no hacer nada 
+        <img clickedPerfil={clickedPerfil} handleClickPerfil={handleClickPerfil} onClick={handleClickPerfil} width='50em' src={userPicture} alt="imagen del usuario"/> */}
+        <img onClick={handleClickPerfil} width='50em' src={userPicture} alt="imagen del usuario"/>
         <div className={`perfil ${clickedPerfil ? 'active' : '' }`}>
-          <ul>Modificar cuenta</ul>
+          <ul> <Link to="/perfil">Modificar cuenta</Link></ul>
           <ul>Ajustes</ul>
         </div>
 

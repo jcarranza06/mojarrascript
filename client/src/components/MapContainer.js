@@ -20,7 +20,7 @@ const MapComponent = () => {
   const opcionesDeSolicitud = {
     enableHighAccuracy: true, // Alta precisión
     maximumAge: 0, // No queremos caché
-    timeout: 5000 // Esperar solo 5 segundos
+    timeout: 10000 // Esperar solo 10 segundos
 };
 
 const onErrorDeUbicacion = err => {

@@ -80,6 +80,7 @@ hr {
   right: 0;
   text-align: left;
   background: linear-gradient(90deg, #8C43E6 0%, #EF8D6D 100%);
+  z-index: 5;
 }
 
 .navbar-search {
