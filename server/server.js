@@ -128,7 +128,7 @@ app.get('/comentarios', (req, res) => {
 });
 
 
-app.get('/comentarios', (req, res) => {
+app.get('/getComentarios', (req, res) => {
 var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
 var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
 
