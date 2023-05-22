@@ -1,0 +1,223 @@
+* {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-feature-settings: 'salt' on, 'liga' off;
+    color: #000000;
+}
+
+.Perfil {
+  padding: 5rem 2rem;
+  width: 638px;
+  margin: 0 auto;
+  gap: 3rem 1rem;
+  box-sizing: border-box;
+}
+
+.fotoPortada {
+  margin: 0px;
+  padding: 20px;
+  display: flex;
+  width: 530px;
+  height: 191px;
+  align-items: center;
+  box-shadow: 1px 10px 10px 2px rgb(0 0 0 / 20%);
+  border: 6px solid transparent;
+  background-image: url('../Iconos/portada.png');
+  background-repeat: repeat;
+  background-size: 800px 237px;
+}
+
+.fotoPerfil {
+  height: 125x;
+  border: 6px #ffffff solid;
+  border-radius: 50%;
+}
+
+.fotoPerfil img {
+  height: 125px;
+  border-radius: 50%;
+}
+
+.fotoPerfil :hover {
+  border: 6px solid #2b322f76;
+  margin: -6px;
+}
+
+.infoPerfil {
+  margin: 0px;
+  padding: 20px;
+  width: 530px;
+  height: 300px;
+  align-items: normal;
+  box-shadow: 1px 10px 10px 2px rgb(0 0 0 / 20%);
+  border: 6px solid transparent;
+}
+
+.infoPerfil p {
+  font-size: 0.75rem;
+  color: #616060;
+}
+
+/* Nombre */
+
+.Nombre {
+  padding: 0 auto;
+  margin: 0 auto;
+  display: grid;
+  align-items: normal;
+  grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
+  gap: 1rem 1rem;
+  box-sizing: border-box;
+  width: 100%;
+} 
+
+.Nombre p {
+  color: #000000;
+}
+
+.editarNombre {
+  margin-top: 5px;
+  height: 30px;
+  width: 30px;
+  background-color: transparent;
+  /*border-color: transparent;*/
+}
+
+.showhide1 {
+  padding: 0 auto;
+  margin: 0 auto;
+  margin-left: -50px;
+  display: grid;
+  align-items: normal;
+  grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
+  gap: 1rem 1rem;
+  box-sizing: border-box;
+  width: 200px;
+}
+
+.cambioNombre {
+  width: 100px;
+}
+
+/* Direccion */
+
+.Direccion {
+  padding: 0 auto;
+  margin: 0 auto;
+  display: grid;
+  align-items: normal;
+  grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
+  gap: 1rem 1rem;
+  box-sizing: border-box;
+  width: 100%;
+} 
+
+.Direccion p {
+  color: #000000;
+}
+
+.editarDireccion {
+  margin-top: 5px;
+  height: 30px;
+  width: 30px;
+  background-color: transparent;
+  /*border-color: transparent;*/
+}
+
+.showhide2 {
+  padding: 0 auto;
+  margin: 0 auto;
+  display: grid;
+  align-items: normal;
+  grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
+  gap: 1rem 1rem;
+  box-sizing: border-box;
+  width: 200px;
+  margin-left: -50px;
+}
+
+.cambioDireccion {
+  width: 100px;
+}
+
+/* Ciudad */
+
+.Ciudad {
+  padding: 0 auto;
+  margin: 0 auto;
+  display: grid;
+  align-items: normal;
+  grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
+  gap: 1rem 1rem;
+  box-sizing: border-box;
+  width: 100%;
+} 
+
+.Ciudad p {
+  color: #000000;
+}
+
+.editarCiudad {
+  margin-top: 5px;
+  height: 30px;
+  width: 30px;
+  background-color: transparent;
+  /*border-color: transparent;*/
+}
+
+.showhide3 {
+  padding: 0 auto;
+  margin: 0 auto;
+  display: grid;
+  align-items: normal;
+  grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
+  gap: 1rem 1rem;
+  box-sizing: border-box;
+  width: 200px;
+  margin-left: -50px;
+}
+
+.cambioCiudad {
+  width: 100px;
+}
+
+/* Departamento */
+
+.Departamento {
+  padding: 0 auto;
+  margin: 0 auto;
+  display: grid;
+  align-items: normal;
+  grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
+  gap: 1rem 1rem;
+  box-sizing: border-box;
+  width: 100%;
+} 
+
+.Departamento p {
+  color: #000000;
+}
+
+.editarDepartamento {
+  margin-top: 5px;
+  height: 30px;
+  width: 30px;
+  background-color: transparent;
+  /*border-color: transparent;*/
+}
+
+.showhide4 {
+  padding: 0 auto;
+  margin: 0 auto;
+  display: grid;
+  align-items: normal;
+  grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
+  gap: 1rem 1rem;
+  box-sizing: border-box;
+  width: 200px;
+  margin-left: -50px;
+}
+
+.cambioDepartamento {
+  width: 100px;
+}
