@@ -1,5 +1,7 @@
 import React from 'react'
 
+import MapContainer from './MapContainer.js';
+
 import "../stylesheets/Home.css"; // import your navbar styles
 
 const iconosFolder = require.context("../Iconos", true)
@@ -108,12 +110,8 @@ function Home() {
                 </div>
 
                 <div className="row-inline-2">
-                    <div className="mapsContainer">
-                        <iframe
-                            title="Ubicacion de usuario"
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d248.54949968614653!2d-74.08205488257842!3d4.631165082134345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9bd4d69adbbb%3A0x43b3f4913d00eb9a!2sPUNTO%202!5e0!3m2!1ses!2sco!4v1681592970729!5m2!1ses!2sco"
-                            style={{ width: '100%', height: 'auto', border: '0' }} allowFullScreen="" loading="lazy"
-                            referrerPolicy="no-referrer-when-downgrade"></iframe>
+                    <div className="map">
+                        <MapContainer />
                     </div>
                     <div className="rowElementContainer">
                         <h3>Busca Productos cerca de ti</h3>
