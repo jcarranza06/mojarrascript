@@ -50,6 +50,17 @@ app.get('/', (req, res) => {
     const userEmail = user.email; // Email del usuario
     const userPicture = user.picture; // URL de la imagen del usuario
 
+
+    var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+    var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+
+    con.connect(function (err) {// se abre la coneccion con la BD
+      if (err) throw err; // validacion de apertura
+      con.query("INSERT INTO usuario (IDUSUARIO,NOMBREUSUARIO,EMAILUSUARIO) VALUES (?,?,?) ON duplicate KEY UPDATE ULTIMACONEXION=current_timestamp();",[userId,userName,userEmail], function (err, result, fields) { // se envía la petición a DB
+        if (err) throw err; // valida peticion enviada corrrectamente
+      });
+    });
+
     // Redirigir al usuario a localhost:3000 con los datos del usuario como parámetros de consulta
     res.redirect(`http://localhost:3000/?userId=${userId}&userName=${userName}&userEmail=${userEmail}&userPicture=${userPicture}`);
   } else {
@@ -92,11 +103,11 @@ app.get('/getProductosEnOferta', (req, res) => { //req va a guardar las variable
 
 */
 app.get('/getProductosEnOferta', (req, res) => {
-  
+
   var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
   var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
 
-  con.connect(function(err) {// se abre la coneccion con la BD
+  con.connect(function (err) {// se abre la coneccion con la BD
     if (err) throw err; // validacion de apertura
     con.query("SELECT P.NOMBREPRODUCTO as 'name', P.IDPRODUCTO, P.IMAGENPRODUCTO as 'img', M.NOMBRESUPERMERCADO, (P.PRECIOPRODUCTO * (1-CP.VALORCARACTERISTICA)) as 'precio' FROM PRODUCTO P JOIN CPERTENECEP CP ON P.IDPRODUCTO = CP.IDPRODUCTO JOIN SUPERMERCADO M ON P.IDSUPERMERCADO = M.IDSUPERMERCADO JOIN CARACTERISTICASPRODUCTO C ON CP.IDCARACTERISTICA = C.IDCARACTERISTICA WHERE C.NOMBRECARACTERISTICA = 'Oferta' ;", function (err, result, fields) { // se envía la petición a DB
       if (err) throw err; // valida peticion enviada corrrectamente
