@@ -50,7 +50,6 @@ app.get('/', (req, res) => {
     const userEmail = user.email; // Email del usuario
     const userPicture = user.picture; // URL de la imagen del usuario
 
-
     var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
     var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
 
@@ -61,13 +60,13 @@ app.get('/', (req, res) => {
       });
     });
 
+
     // Redirigir al usuario a localhost:3000 con los datos del usuario como parámetros de consulta
     res.redirect(`http://localhost:3000/?userId=${userId}&userName=${userName}&userEmail=${userEmail}&userPicture=${userPicture}`);
   } else {
     res.send('Log in');
   }
 });
-
 
 
 
@@ -100,6 +99,51 @@ app.get('/', (req, res) => {
 //     });
 //   });
 // });
+  
+// Ruta para recibir los comentarios del frontend y guardarlos en la base de datos
+app.get('/comentarios', (req, res) => {
+  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+  var con = conn.con();
+  const { comentId, userId, productId, comentario } = req.body;
+
+  const sql = `INSERT INTO COMENTARIO (IDCOMENTARIO, IDUSUARIO, IDPRODUCTO, COMENTARIO) VALUES (?, ?, ?, ?)`;
+  const values = [comentId, userId, productId, comentario];
+  con.connect(function(err) {
+    if (err) throw err;
+  con.query(sql, values, (err, result) => {    
+    if (err) {
+      console.error('Error al insertar el comentario:', err);
+      res.status(500).send('Error al insertar el comentario');
+    } else {
+      console.log('Comentario insertado correctamente');
+      res.status(200).send('Comentario insertado correctamente');
+    }
+  });
+});
+});
+    
+ 
+app.get('/getComentarios', (req, res) => {
+var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+
+con.connect(function(err) {// se abre la coneccion con la BD
+  if (err) throw err; // validacion de apertura
+// Ruta para obtener todos los comentarios
+
+  const sql = 'SELECT COMENTARIO, IDUSUARIO, IDPRODUCTO FROM COMENTARIO';
+
+  con.query(sql, (err, results) => {
+    if (err) {
+      console.error('Error al obtener los comentarios:', err);
+      res.status(500).send('Error al obtener los comentarios');
+    } else {
+      console.log('Comentarios obtenidos correctamente');
+      res.status(200).json(results);
+    }
+  });
+});
+});
 
 
 app.get('/getProductosEnOferta', (req, res) => {
@@ -113,6 +157,7 @@ app.get('/getProductosEnOferta', (req, res) => {
 
     if (err) throw err; // valida peticion enviada corrrectamente
     res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
+      
   });
 });
 });
