@@ -1,0 +1,97 @@
+* {
+  font-family: Inter, sans-serif;
+  font-style: normal;
+  font-feature-settings: 'salt' on, 'liga' off;
+  color: #000000;
+}
+
+.title {
+  font-size: 2.4rem;
+  padding: 10rem 0 0 0;
+  color: #8C43E6;
+  font-family: Helvetica, sans-serif;
+}
+
+.productos {
+  padding: 5rem 7rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 3rem 1rem;
+  box-sizing: border-box;
+}
+
+.producto {
+  display: flex;
+  width: 175px;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 1px 10px 10px 2px rgb(0 0 0 / 20%);
+  border: 6px solid transparent;
+  border-radius: 20px;
+}
+
+.producto:hover {
+  border: 6px solid #2b322f76;
+}
+
+.productoIMG img{
+  width: 159px;
+}
+
+.cadenaIMG img{
+  width: 50px;
+}
+
+.productoInfo h1{
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: #000000;
+  font-family: Helvetica, sans-serif;
+  text-align: center;
+}
+
+.productoInfo p{
+  font-weight: 700;
+  font-size: 18px;
+  color: rgb(0 0 0 / .555);
+  font-family: Helvetica, sans-serif;
+  text-align: center;
+}
+
+.producto .buttom {
+  width: 100%;
+  height: 45px;
+}
+
+.buttom .btn {
+  border: none;
+  outline: 0;
+  cursor: pointer;
+  height: 35px;
+  border-radius: 20px;
+  background-color: #8C43E6;
+  display: grid;
+  align-items: center;
+  text-align: center;
+}
+
+.buttom a{
+  color: #ffffff;
+  font-weight: 700;
+  font-family: Helvetica, sans-serif;
+}
+
+.contenedor-preproducto {
+  width: 252px;
+  height: 344px;
+  left: 421px;
+  top: 144px;
+  margin: 10px 10px 50px;
+  display: flex;
+  align-items: center;
+  justify-content: baseline;
+  background-color: #ffffff;
+  box-shadow: 0 3px 13px 1px rgb(0 0 0 / 9%);
+  border-radius: 20px;
+}

@@ -1,9 +1,14 @@
-import React from 'react'
+// le agregué hooks useState y useEffect
+import React, { useState, useEffect } from 'react';
 
 import "../stylesheets/Home.css"; // import your navbar styles
+import prev from "../Iconos/Icons/prev.png";
+import next from "../Iconos/Icons/next.png";
+
 
 const iconosFolder = require.context("../Iconos", true)
-const iconos = [ 
+
+const iconos = [
     {
         name: 'Mercado',
         img: './image 134.svg'
@@ -37,128 +42,78 @@ const iconos = [
         img: './carne.png'
     },
 
-]
-//datasets de prueba
-let productosMasComprados = [
-    {
-        name: 'Televisor 32"',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },
-    {
-        name: 'Televisor 32"',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },
-    {
-        name: 'Televisor 32"',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },
-    {
-        name: 'Televisor 32"',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },
-    {
-        name: 'Televisor 32"    ',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },
-    {
-        name: 'Televisor',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    }
-]
+];
 
-let productosEnOferta = [
-    {
-        name: 'televisor',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },
-    {
-        name: 'Televisor',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },
-    {
-        name: 'Televisor',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },
-    {
-        name: 'Televisor',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },
-    {
-        name: 'Televisor',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },
-    {
-        name: 'Televisor',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },{
-        name: 'Televisor',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },
-    {
-        name: 'Televisor',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },
-    {
-        name: 'televisor',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },{
-        name: 'televisor',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },
-    {
-        name: 'televisor',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },
-    {
-        name: 'televisor',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    }
-]
+//getProductosEnOferta();
 
 function addStylesheet(url) {
     const link = document.createElement('link');
     link.href = url;
     link.rel = 'stylesheet';
     document.head.appendChild(link);
-  }
+}
 
 function Home() {
+
+    // PRODUCTOS EN OFERTA
+    const [productosEnOferta, setProductosEnOferta] = useState([]);
+    function getProductosEnOferta() {
+        // configuracion para la petición
+        const options = {
+            method: "GET"
+        };
+        
+ 
+        // Petición HTTP, consulta api y devuelve el body 
+        let url = new URL ("http://localhost:5000/getProductosEnOferta");
+        fetch(url, options) // se hace la consulta 
+            .then(response => response.text()) // se obtiene el cuerpo de la respuesta
+            .then(data => {
+                const json = JSON.parse(data);// se pasa la respuesta de string json a objeto de javascript
+                console.log(json);
+                setProductosEnOferta(json); // funcion del useState
+            });
+    }
+
+    // PRODUCTOS MÁS VENDIDOS
+    const [productosMasVendidos,setProductosMasVendidos] = useState([]);
+    function getProductosMasVendidos() {
+        const options = {
+            method: "GET"
+        };
+
+        // Petición HTTP, consulta api y devuelve el body 
+        let url = new URL ("http://localhost:5000/getProductosMasVendidos");
+        fetch(url, options) // se hace la consulta 
+            .then(response => response.text()) // se obtiene el cuerpo de la respuesta
+            .then(data => {
+                const json = JSON.parse(data);// se pasa la respuesta de string json a objeto de javascript
+                console.log(json);
+                setProductosMasVendidos(json); // funcion del useState
+            });
+    }
+
+    // se usa useEffect((),[]) sin parametros para solo hacer una vez la consulta a la BD, no se debe hacer cada vez que se renderice
+    useEffect(() => {
+        getProductosEnOferta();
+    }, []);
+    //setProductosEnOferta(prods);
+
+    useEffect(() => {
+        getProductosMasVendidos();
+    }, []);
+  
+
+    const [scrollAmount, setScrollAmount] = useState(0);
+
+    const handleScroll = (scrollOffset) => {
+    const container = document.querySelector('.horizontalCardContainer.mas');
+    const newScrollAmount = scrollAmount + scrollOffset;
+    container.scrollLeft = newScrollAmount;
+    setScrollAmount(newScrollAmount);
+
+  };
+
     return (
         <div className="home">
             {addStylesheet("https://fonts.googleapis.com/css2?family=Inter:wght@100&display=swap")}
@@ -192,39 +147,55 @@ function Home() {
                         </div>
 
                         <h1>Lo más comprado</h1>
-                        <div className="horizontalCardContainer">
+                        <div className='productosMasComprados'> 
+                        <img onClick={() => handleScroll(-300)} className='imagenPrev' src={prev} alt="flecha correr hacia atras" width="20rem" height="20rem" />
+                        <div className="horizontalCardContainer mas" style={{ overflowX: 'scroll', whiteSpace: 'nowrap' }}>
                             {
-                                productosMasComprados.map((producto, indice) => {
-                                    return (
-                                        <div className="card producto" key={indice}>
-                                            <img src={iconosFolder(producto.img)} alt=""></img>
-                                            {producto.name}
-                                            <img src={iconosFolder(producto.market)} alt=""></img>
-                                            <button>
-                                                $ {producto.price}
-                                            </button>
-                                        </div>
-                                    );
-                                })
-                            }
+                            (productosMasVendidos === 0 ? (
+                                <p>Cargando ...</p> // en caso que no haya cargado 
+                            ) : (
+                                productosMasVendidos.map((producto, indice) => // se recorre el arreglo para mostrar los elementos
+                                    (
+                                    <div className="card producto" key={indice}>
+                                        <img src={producto.imagen} alt=""></img>
+                                        {producto.nombre}
+
+                                        <span>{producto.supermercado}</span>
+
+                                        <button>
+                                            $ {producto.precio}
+                                        </button>
+                                    </div>
+                                    )
+                                )
+                            ))
+                        }
+                        </div>
+                        <img onClick={() => handleScroll(300)} className='imagenPrev' src={next} alt="flecha correr hacia adelante" width="20rem" height="20rem" />
                         </div>
                     </div>
                 </div>
                 <h1>Ofertas</h1>
                 <div className="horizontalCardContainerOfertas">
                     {
-                        productosEnOferta.map((producto, indice) => {
-                            return (
+                        (productosEnOferta === 0 ? (
+                            <p>Cargando ...</p> // en caso que no haya cargado 
+                        ) : (
+                            productosEnOferta.map((producto, indice) => // se recorre el arreglo para mostrar los elementos
+                                (
                                 <div className="card producto" key={indice}>
-                                    <img src={iconosFolder(producto.img)} alt=""></img>
+                                    <img src={producto.img} alt=""></img>
                                     {producto.name}
-                                    <img src={iconosFolder(producto.market)} width="50em" alt=""></img>
+
+                                    <span>{producto.NOMBRESUPERMERCADO}</span>
+
                                     <button>
-                                        $ {producto.price}
+                                        $ {producto.precio}
                                     </button>
                                 </div>
-                            );
-                        })
+                                )
+                            )
+                        ))
                     }
                 </div>
             </div>
