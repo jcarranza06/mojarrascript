@@ -126,3 +126,26 @@ app.get('/comentarios', (req, res) => {
   });
 });
 });
+
+
+app.get('/comentarios', (req, res) => {
+var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+
+con.connect(function(err) {// se abre la coneccion con la BD
+  if (err) throw err; // validacion de apertura
+// Ruta para obtener todos los comentarios
+
+  const sql = 'SELECT COMENTARIO, IDUSUARIO, IDPRODUCTO FROM COMENTARIO';
+
+  con.query(sql, (err, results) => {
+    if (err) {
+      console.error('Error al obtener los comentarios:', err);
+      res.status(500).send('Error al obtener los comentarios');
+    } else {
+      console.log('Comentarios obtenidos correctamente');
+      res.status(200).json(results);
+    }
+  });
+});
+});
