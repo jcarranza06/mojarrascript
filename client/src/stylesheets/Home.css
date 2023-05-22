@@ -72,6 +72,10 @@ h1 {
     min-height: 350px;
 }
 
+.map {
+    min-height: 350px;
+}
+
 .home {
     display: flex;
     flex-direction: column;
