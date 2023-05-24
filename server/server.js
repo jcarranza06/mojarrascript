@@ -99,7 +99,7 @@ app.get('/', (req, res) => {
 //     });
 //   });
 // });
-  
+
 // Ruta para recibir los comentarios del frontend y guardarlos en la base de datos
 app.get('/comentarios', (req, res) => {
   var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
@@ -108,41 +108,41 @@ app.get('/comentarios', (req, res) => {
 
   const sql = `INSERT INTO COMENTARIO (IDCOMENTARIO, IDUSUARIO, IDPRODUCTO, COMENTARIO) VALUES (?, ?, ?, ?)`;
   const values = [comentId, userId, productId, comentario];
-  con.connect(function(err) {
+  con.connect(function (err) {
     if (err) throw err;
-  con.query(sql, values, (err, result) => {    
-    if (err) {
-      console.error('Error al insertar el comentario:', err);
-      res.status(500).send('Error al insertar el comentario');
-    } else {
-      console.log('Comentario insertado correctamente');
-      res.status(200).send('Comentario insertado correctamente');
-    }
+    con.query(sql, values, (err, result) => {
+      if (err) {
+        console.error('Error al insertar el comentario:', err);
+        res.status(500).send('Error al insertar el comentario');
+      } else {
+        console.log('Comentario insertado correctamente');
+        res.status(200).send('Comentario insertado correctamente');
+      }
+    });
   });
 });
-});
-    
- 
+
+
 app.get('/getComentarios', (req, res) => {
-var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
-var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+  var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
 
-con.connect(function(err) {// se abre la coneccion con la BD
-  if (err) throw err; // validacion de apertura
-// Ruta para obtener todos los comentarios
+  con.connect(function (err) {// se abre la coneccion con la BD
+    if (err) throw err; // validacion de apertura
+    // Ruta para obtener todos los comentarios
 
-  const sql = 'SELECT COMENTARIO, IDUSUARIO, IDPRODUCTO FROM COMENTARIO';
+    const sql = 'SELECT COMENTARIO, IDUSUARIO, IDPRODUCTO FROM COMENTARIO';
 
-  con.query(sql, (err, results) => {
-    if (err) {
-      console.error('Error al obtener los comentarios:', err);
-      res.status(500).send('Error al obtener los comentarios');
-    } else {
-      console.log('Comentarios obtenidos correctamente');
-      res.status(200).json(results);
-    }
+    con.query(sql, (err, results) => {
+      if (err) {
+        console.error('Error al obtener los comentarios:', err);
+        res.status(500).send('Error al obtener los comentarios');
+      } else {
+        console.log('Comentarios obtenidos correctamente');
+        res.status(200).json(results);
+      }
+    });
   });
-});
 });
 
 
@@ -153,26 +153,76 @@ app.get('/getProductosEnOferta', (req, res) => {
 
   con.connect(function (err) {// se abre la coneccion con la BD
     if (err) throw err; // validacion de apertura
-    con.query("SELECT P.NOMBREPRODUCTO as 'name', P.IDPRODUCTO, P.IMAGENPRODUCTO as 'img', M.NOMBRESUPERMERCADO, (P.PRECIOPRODUCTO * (1-CP.VALORCARACTERISTICA)) as 'precio' FROM PRODUCTO P JOIN CPERTENECEP CP ON P.IDPRODUCTO = CP.IDPRODUCTO JOIN SUPERMERCADO M ON P.IDSUPERMERCADO = M.IDSUPERMERCADO JOIN CARACTERISTICASPRODUCTO C ON CP.IDCARACTERISTICA = C.IDCARACTERISTICA WHERE C.NOMBRECARACTERISTICA = 'Oferta' ;", function (err, result, fields) { // se envía la petición a DB
+    con.query("SELECT P.NOMBREPRODUCTO as 'nombre', P.IDPRODUCTO as 'id', P.IMAGENPRODUCTO as 'imagen', M.NOMBRESUPERMERCADO as 'supermercado', (P.PRECIOPRODUCTO * (1-CP.VALORCARACTERISTICA)) as 'precio' FROM PRODUCTO P JOIN CPERTENECEP CP ON P.IDPRODUCTO = CP.IDPRODUCTO JOIN SUPERMERCADO M ON P.IDSUPERMERCADO = M.IDSUPERMERCADO JOIN CARACTERISTICASPRODUCTO C ON CP.IDCARACTERISTICA = C.IDCARACTERISTICA WHERE C.NOMBRECARACTERISTICA = 'Oferta' ;", function (err, result, fields) { // se envía la petición a DB
 
-    if (err) throw err; // valida peticion enviada corrrectamente
-    res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
-      
+      if (err) throw err; // valida peticion enviada corrrectamente
+      res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
+
+    });
   });
-});
 });
 
 app.get('/getProductosMasVendidos', (req, res) => {
-  
+
   var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
   var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
 
-  con.connect(function(err) {// se abre la coneccion con la BD
+  con.connect(function (err) {// se abre la coneccion con la BD
     if (err) throw err; // validacion de apertura
     con.query("SELECT IDPRODUCTO as id, NOMBREPRODUCTO as nombre,supermercado.NOMBRESUPERMERCADO as supermercado, PRECIOPRODUCTO as precio, DESCRIPCIONPRODUCTO as descricion, IMAGENPRODUCTO as imagen FROM `producto` JOIN supermercado WHERE supermercado.IDSUPERMERCADO = producto.IDSUPERMERCADO order by CANTIDADVENDIDA desc limit 5;", function (err, result, fields) { // se envía la petición a DB
       if (err) throw err; // valida peticion enviada corrrectamente
       res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
     });
   });
+});
+
+app.get('/getProductoById', (req, res) => {
+
+  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+  var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+  let id = req.query.idProducto;
+  con.connect(function (err) {// se abre la coneccion con la BD
+    if (err) throw err; // validacion de apertura
+    con.query("SELECT P.IDPRODUCTO AS id, P.NOMBREPRODUCTO AS nombre, P.PRECIOPRODUCTO AS precio, (P.PRECIOPRODUCTO*(1- CP.VALORCARACTERISTICA)) AS descuento,P.DESCRIPCIONPRODUCTO AS descripcion ,P.IMAGENPRODUCTO AS img  FROM producto P LEFT JOIN (SELECT * FROM CPERTENECEP WHERE IDCARACTERISTICA = 1) CP ON P.IDPRODUCTO = CP.IDPRODUCTO WHERE P.IDPRODUCTO=? LIMIT 1;", [id], function (err, result, fields) { // se envía la petición a DB
+      if (err) throw err; // valida peticion enviada corrrectamente
+      res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
+    });
+  });
+});
+
+app.get('/searchProduct', (req, res) => {
+
+  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+  var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+  let filtrar = Number(req.query.filtrar);
+  let search = '%' + req.query.search + '%';
+  if (!filtrar) {
+    con.connect(function (err) {// se abre la coneccion con la BD
+      if (err) throw err; // validacion de apertura
+      con.query("SELECT P.NOMBREPRODUCTO as 'name', P.IDPRODUCTO, P.IMAGENPRODUCTO as 'img', M.NOMBRESUPERMERCADO, P.PRECIOPRODUCTO as 'precio' FROM PRODUCTO P JOIN SUPERMERCADO M ON P.IDSUPERMERCADO = M.IDSUPERMERCADO WHERE LOWER(P.NOMBREPRODUCTO)  LIKE ?;", [search], function (err, result, fields) { // se envía la petición a DB
+        if (err) throw err; // valida peticion enviada corrrectamente
+        res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
+      });
+    });
+  }else{
+    let rangoPrecio = {min: req.query.min, max: req.query.max}
+    let order = Number(req.query.order);
+    let querySql;
+    if (order == 0){
+      querySql= "SELECT P.NOMBREPRODUCTO as 'name', P.IDPRODUCTO, P.IMAGENPRODUCTO as 'img', M.NOMBRESUPERMERCADO, P.PRECIOPRODUCTO as 'precio' FROM PRODUCTO P JOIN SUPERMERCADO M ON P.IDSUPERMERCADO = M.IDSUPERMERCADO WHERE (LOWER(P.NOMBREPRODUCTO)  LIKE ? AND P.PRECIOPRODUCTO>=? AND P.PRECIOPRODUCTO <=?);";
+    }else{
+      let o = order == 1 ? 'DESC':'ASC';
+      querySql= "SELECT P.NOMBREPRODUCTO as 'name', P.IDPRODUCTO, P.IMAGENPRODUCTO as 'img', M.NOMBRESUPERMERCADO, P.PRECIOPRODUCTO as 'precio' FROM PRODUCTO P JOIN SUPERMERCADO M ON P.IDSUPERMERCADO = M.IDSUPERMERCADO WHERE (LOWER(P.NOMBREPRODUCTO)  LIKE ? AND P.PRECIOPRODUCTO>=? AND P.PRECIOPRODUCTO <=?) ORDER BY P.PRECIOPRODUCTO "+o+";";
+    }
+    
+    con.connect(function (err) {// se abre la coneccion con la BD
+      if (err) throw err; // validacion de apertura
+      con.query(querySql, [search, rangoPrecio.min, rangoPrecio.max], function (err, result, fields) { // se envía la petición a DB
+        if (err) throw err; // valida peticion enviada corrrectamente
+        res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
+      });
+    });
+  }
+
 });
 
