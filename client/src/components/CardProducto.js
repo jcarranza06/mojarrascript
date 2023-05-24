@@ -1,17 +1,25 @@
 import React from 'react'
 import "../stylesheets/Home.css"; // import your navbar styles
+import {
+    Link,
+    useNavigate
+} from "react-router-dom";
 
-function CardProducto({data},{index}) {
+function CardProducto(props) {
     return (
-        <div className="card producto" key={index}>
-            <img src="../Iconos/image 154.png" alt=""></img>
-            {data.name}
-            {index}
-            <img src="" alt=""></img>
-            <button>
-                $ 5
-            </button>
-        </div>
+        <Link to={{ pathname: '/producto', search: ('?idProducto=' + props.producto.id) }} >
+            <div className="card producto" key={props.indice}>
+                <img src={props.producto.imagen} alt=""></img>
+                {props.producto.nombre}
+
+                <span>{props.producto.supermercado}</span>
+
+                <button>
+                    $ {props.producto.precio}
+                </button>
+            </div>
+        </Link>
+
     );
 }
 

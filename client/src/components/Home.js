@@ -5,7 +5,11 @@ import MapContainer from './MapContainer.js';
 import "../stylesheets/Home.css"; // import your navbar styles
 import prev from "../Iconos/Icons/prev.png";
 import next from "../Iconos/Icons/next.png";
-
+import CardProducto from './CardProducto.js';
+import {
+    Link,
+    useNavigate
+} from "react-router-dom";
 
 const iconosFolder = require.context("../Iconos", true)
 
@@ -115,6 +119,12 @@ function Home() {
 
     };
 
+    const navigate = useNavigate();
+
+    const toProducto = (id) => {
+        navigate('/producto', { state: { idProducto: id } });
+    }
+
     return (
         <div className="home">
             {addStylesheet("https://fonts.googleapis.com/css2?family=Inter:wght@100&display=swap")}
@@ -159,16 +169,7 @@ function Home() {
                                     ) : (
                                         productosMasVendidos.map((producto, indice) => // se recorre el arreglo para mostrar los elementos
                                         (
-                                            <div className="card producto" key={indice}>
-                                                <img src={producto.imagen} alt=""></img>
-                                                {producto.nombre}
-
-                                                <span>{producto.supermercado}</span>
-
-                                                <button>
-                                                    $ {producto.precio}
-                                                </button>
-                                            </div>
+                                            <CardProducto key={indice} producto={producto} />    
                                         )
                                         )
                                     ))
@@ -186,16 +187,7 @@ function Home() {
                         ) : (
                             productosEnOferta.map((producto, indice) => // se recorre el arreglo para mostrar los elementos
                             (
-                                <div className="card producto" key={indice}>
-                                    <img src={producto.img} alt=""></img>
-                                    {producto.name}
-
-                                    <span>{producto.NOMBRESUPERMERCADO}</span>
-
-                                    <button>
-                                        $ {producto.precio}
-                                    </button>
-                                </div>
+                                <CardProducto key={indice} producto={producto} />
                             )
                             )
                         ))

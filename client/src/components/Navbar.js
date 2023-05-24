@@ -6,7 +6,7 @@ import menuHam from "../Iconos/Icons/menu_hamburguesa.svg";
 import usuarioImg from "../Iconos/Icons/usuario.svg";
 import { Outlet, Link } from "react-router-dom";
 
-
+const baseURL = 'http://localhost:3000/';
 
 function Navbar() {
 
@@ -39,7 +39,23 @@ function Navbar() {
     arr = userName.split(' ');
     name = arr[0];
   }
-  console.log(userId,userName,userEmail,userPicture);
+  //console.log(userId,userName,userEmail,userPicture);
+  // se crea variable para la busqueda del input de navbar 
+  const [busqueda, setBusqueda] = useState("")
+
+  // funcion que detecta Intro en el input 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') { 
+      // 👇 Get input value
+      console.log(busqueda);
+      window.location.href = baseURL + 'preproducto?search='+busqueda;
+    }
+  };
+
+  // funcion que actualiza la variable busqueda cuando se escribe en el input 
+  const handleChange = event => {
+    setBusqueda(event.target.value)
+  }
 
   return (
     <nav className="navbar">
@@ -55,7 +71,7 @@ function Navbar() {
       </div>
       <div className="textCategorias">Categorías</div>
       <div className={`categorias ${clicked ? 'active' : '' }`}>
-          <ul>Lista de compras</ul>
+          <ul><Link to="/nuevaLista">Lista de compras</Link></ul>
           <ul>Historial</ul>
           <hr></hr>
           <li> Mercado </li>
@@ -71,7 +87,7 @@ function Navbar() {
 
       {/* SEARCH */}
       <div className="navbar-search">
-        <input type="text" placeholder="¿Qué estas buscando?" />
+        <input type="text" placeholder="¿Qué estas buscando?" onKeyDown={handleKeyDown} value={name} onChange={handleChange}/>
       </div>
 
       {/* EL SIGUIENTE FRAGMENTO DE CODIGO HACE LO SIGUIENTE */}
