@@ -1,6 +1,7 @@
 // import logo from './logo.svg';
 import Home from './components/Home';
 import { List, NewLista } from './components/ListasCompras';
+import CrearLista from './components/CrearLista';
 import Navbar from './components/Navbar';
 
 import Footer from './components/footer';
@@ -30,7 +31,7 @@ function App() {
         <Route path='/perfil' element={<Perfil/>}/>
         <Route path='/producto' element={<VerProducto/>}/>
         <Route path='/preProducto' element={<PreProducto/>}/>
-        <Route path='/nuevaLista' element={<NewLista/>}/>
+        <Route path='/nuevaLista' element={<CrearLista/>}/>
         <Route path='*' element={<PaginaNoEncontrada/>}/>
       </Routes>
       <Footer/>
