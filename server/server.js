@@ -223,6 +223,6 @@ app.get('/searchProduct', (req, res) => {
       });
     });
   }
-
+  
 });
 

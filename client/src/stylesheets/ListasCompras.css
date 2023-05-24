@@ -1,167 +1,179 @@
-.List{
-        background: #E5E5E5;
-        height:100%;
+.List {
+  background: #E5E5E5;
+  height: 100%;
 }
 
-.textgrande{
-    font-size:3em;
-    margin-top: 0.5em;
-    margin-left: 0.5em;
-    font-weight: bolder;
-}
-.text{
-    text-align: justify;
-    font-size:1.5em;
-    margin-top: 1em;
-    margin-left: 1em;
-    margin-right: 1em;
-    font-weight: bolder;
+.textgrande {
+  font-size: 3em;
+  margin-top: 0.5em;
+  margin-left: 0.5em;
+  font-weight: bolder;
 }
 
-li{
-    cursor: pointer;
+.text {
+  text-align: justify;
+  font-size: 1.5em;
+  margin-top: 1em;
+  margin-left: 1em;
+  margin-right: 1em;
+  font-weight: bolder;
 }
 
-.fav{
-    
-    background: -webkit-linear-gradient(right, #8C43E6,#EF8D6D);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color: transparent;
-    color: rgb(0, 0, 0);  
-    font-weight: bolder;
+li {
+  cursor: pointer;
+}
+
+.fav {
+
+  background: -webkit-linear-gradient(right, #8C43E6, #EF8D6D);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: rgb(0, 0, 0);
+  font-weight: bolder;
 }
 
 .Listas {
 
-    font-size:1.8em;
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 240px);
-    gap: 2em;
-    margin: 1em;
-    padding: 0em;
-    place-content: center;
-    font-weight: bolder;
+  font-size: 1.8em;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 240px);
+  gap: 2em;
+  margin: 1em;
+  padding: 0em;
+  place-content: center;
+  font-weight: bolder;
 }
 
-.new{
-    width: 15em;
-    cursor: pointer; 
-    font-size:1.8em;
-    background: -webkit-linear-gradient(right, #8C43E6,#EF8D6D);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: rgb(0, 0, 0);  
-    font-weight: bolder;
-    margin-left:1em;  
-    margin-bottom: 1em;
+.new {
+  width: 15em;
+  cursor: pointer;
+  font-size: 1.8em;
+  background: -webkit-linear-gradient(right, #8C43E6, #EF8D6D);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: rgb(0, 0, 0);
+  font-weight: bolder;
+  margin-left: 1em;
+  margin-bottom: 1em;
 }
 
-  
-  .new-lista-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap:1em;
-  }
-  
-  .lista-compras {
-    font-size:1.5em;
-    display: flex;
-    flex-wrap: wrap;
-    list-style: none;
-    padding: 0;
-    gap:1em;
-    margin-left: 1em;
-    margin: 0;
-  }
-  
-  .lista-compras li {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    margin-right: 10px;
-    margin-left: 1em;
-  }
-  
-  .lista-compras li.eliminar {
-    color: purple;
-    font-weight: bolder;
-  }
-  
-  .lista-compras li:hover {
-    color: purple;
-    font-weight: bolder;
-  }
 
-  .lista-compras li:not(:first-child)::before{
-    content: "●";
-    margin-right: 5px;
-  }
-  .lista-compras li:first-child::before{
-    content: "●";
-    margin-right: 5px;
-  }
+.new-lista-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1em;
+}
 
-  .bullet {
-    width: 10px;
-    height: 10px;
-    background-color: black;
-    border-radius: 50%;
-    margin-right: 5px;
-  }
+.lista-compras {
+  font-size: 1.5em;
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  gap: 1em;
+  margin-left: 1em;
+  margin: 0;
+}
 
-  input[type="text"] {
-    padding: 8px;
-    margin-bottom: 10px;
-  }
+.lista-compras li {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+  margin-left: 1em;
+}
 
-  .input-container {
-    position:relative;
-    display: flex;
-    align-items: center;
-    margin-top:2em;
-    margin-bottom: 1em;
-    margin-left: 1.5em;
-  }
-  
-  .input-container input[type="text"] {
-    margin-left: 1em;
-    margin-right: 1em;
-    padding: 6px;
-    width: 10em;
-    border-radius: 4px;
-  }
+.lista-compras li.eliminar {
+  color: purple;
+  font-weight: bolder;
+}
 
-  .boton-crear {
-    align-self: flex-start;
-    background: linear-gradient(90deg, #8C43E6 0%, #EF8D6D 100%);
-    color: #FFFFFF;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+.lista-compras li:hover {
+  color: purple;
+  font-weight: bolder;
+}
 
-  .boton-crear:hover {
-    background:  linear-gradient(90deg, #7640b8 0%, #c77256 100%);
-  }
+.lista-compras li:not(:first-child)::before {
+  content: "●";
+  margin-right: 5px;
+}
 
-  .boton-eliminar {
-    align-self: flex-start;
-    background-color:  #8C43E6;
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  
-  .boton-eliminar:hover {
-    background-color:  #703caf;
-  }
+.lista-compras li:first-child::before {
+  content: "●";
+  margin-right: 5px;
+}
 
-  .boton-eliminar.activado {
-    background-color: #EF8D6D;
-  }
+.bullet {
+  width: 10px;
+  height: 10px;
+  background-color: black;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+input[type="text"] {
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-top: 2em;
+  margin-bottom: 1em;
+  margin-left: 1.5em;
+}
+
+.input-container input[type="text"] {
+  margin-left: 1em;
+  margin-right: 1em;
+  padding: 6px;
+  width: 10em;
+  border-radius: 4px;
+}
+
+.boton-crear {
+  align-self: flex-start;
+  background: linear-gradient(90deg, #8C43E6 0%, #EF8D6D 100%);
+  color: #FFFFFF;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.boton-crear:hover {
+  background: linear-gradient(90deg, #7640b8 0%, #c77256 100%);
+}
+
+.boton-eliminar {
+  align-self: flex-start;
+  background-color: #8C43E6;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+.boton-eliminar:hover {
+  background-color: #703caf;
+}
+
+.boton-eliminar.activado {
+  background-color: #EF8D6D;
+}
+
+ul.lista-compras li {
+  color: black;
+  font-weight: 700;
+}
+
+.boton-eliminar.activado:hover {
+  background-color: #bd6c52;
+  transform: scale(1.05);
+}
