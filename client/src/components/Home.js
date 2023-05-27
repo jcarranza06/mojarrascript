@@ -1,10 +1,15 @@
 // le agregué hooks useState y useEffect
 import React, { useState, useEffect } from 'react';
+import MapContainer from './MapContainer.js';
 
 import "../stylesheets/Home.css"; // import your navbar styles
 import prev from "../Iconos/Icons/prev.png";
 import next from "../Iconos/Icons/next.png";
-
+import CardProducto from './CardProducto.js';
+import {
+    Link,
+    useNavigate
+} from "react-router-dom";
 
 const iconosFolder = require.context("../Iconos", true)
 
@@ -62,10 +67,10 @@ function Home() {
         const options = {
             method: "GET"
         };
-        
- 
+
+
         // Petición HTTP, consulta api y devuelve el body 
-        let url = new URL ("http://localhost:5000/getProductosEnOferta");
+        let url = new URL("http://localhost:5000/getProductosEnOferta");
         fetch(url, options) // se hace la consulta 
             .then(response => response.text()) // se obtiene el cuerpo de la respuesta
             .then(data => {
@@ -76,14 +81,14 @@ function Home() {
     }
 
     // PRODUCTOS MÁS VENDIDOS
-    const [productosMasVendidos,setProductosMasVendidos] = useState([]);
+    const [productosMasVendidos, setProductosMasVendidos] = useState([]);
     function getProductosMasVendidos() {
         const options = {
             method: "GET"
         };
 
         // Petición HTTP, consulta api y devuelve el body 
-        let url = new URL ("http://localhost:5000/getProductosMasVendidos");
+        let url = new URL("http://localhost:5000/getProductosMasVendidos");
         fetch(url, options) // se hace la consulta 
             .then(response => response.text()) // se obtiene el cuerpo de la respuesta
             .then(data => {
@@ -102,17 +107,23 @@ function Home() {
     useEffect(() => {
         getProductosMasVendidos();
     }, []);
-  
+
 
     const [scrollAmount, setScrollAmount] = useState(0);
 
     const handleScroll = (scrollOffset) => {
-    const container = document.querySelector('.horizontalCardContainer.mas');
-    const newScrollAmount = scrollAmount + scrollOffset;
-    container.scrollLeft = newScrollAmount;
-    setScrollAmount(newScrollAmount);
+        const container = document.querySelector('.horizontalCardContainer.mas');
+        const newScrollAmount = scrollAmount + scrollOffset;
+        container.scrollLeft = newScrollAmount;
+        setScrollAmount(newScrollAmount);
 
-  };
+    };
+
+    const navigate = useNavigate();
+
+    const toProducto = (id) => {
+        navigate('/producto', { state: { idProducto: id } });
+    }
 
     return (
         <div className="home">
@@ -133,12 +144,14 @@ function Home() {
                 </div>
 
                 <div className="row-inline-2">
-                    <div className="mapsContainer">
+                    <div className="map">
+                        <MapContainer />
+                        {/*<div className="mapsContainer">
                         <iframe
                             title="Ubicacion de usuario"
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d248.54949968614653!2d-74.08205488257842!3d4.631165082134345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9bd4d69adbbb%3A0x43b3f4913d00eb9a!2sPUNTO%202!5e0!3m2!1ses!2sco!4v1681592970729!5m2!1ses!2sco"
                             style={{ width: '100%', height: '100%', border: '0' }} allowFullScreen="" loading="lazy"
-                            referrerPolicy="no-referrer-when-downgrade"></iframe>
+                referrerPolicy="no-referrer-when-downgrade"></iframe>*/}
                     </div>
                     <div className="rowElementContainer">
                         <h1>Busca Productos cerca de ti</h1>
@@ -147,31 +160,22 @@ function Home() {
                         </div>
 
                         <h1>Lo más comprado</h1>
-                        <div className='productosMasComprados'> 
-                        <img onClick={() => handleScroll(-300)} className='imagenPrev' src={prev} alt="flecha correr hacia atras" width="20rem" height="20rem" />
-                        <div className="horizontalCardContainer mas" style={{ overflowX: 'scroll', whiteSpace: 'nowrap' }}>
-                            {
-                            (productosMasVendidos === 0 ? (
-                                <p>Cargando ...</p> // en caso que no haya cargado 
-                            ) : (
-                                productosMasVendidos.map((producto, indice) => // se recorre el arreglo para mostrar los elementos
-                                    (
-                                    <div className="card producto" key={indice}>
-                                        <img src={producto.imagen} alt=""></img>
-                                        {producto.nombre}
-
-                                        <span>{producto.supermercado}</span>
-
-                                        <button>
-                                            $ {producto.precio}
-                                        </button>
-                                    </div>
-                                    )
-                                )
-                            ))
-                        }
-                        </div>
-                        <img onClick={() => handleScroll(300)} className='imagenPrev' src={next} alt="flecha correr hacia adelante" width="20rem" height="20rem" />
+                        <div className='productosMasComprados'>
+                            <img onClick={() => handleScroll(-300)} className='imagenPrev' src={prev} alt="flecha correr hacia atras" width="20rem" height="20rem" />
+                            <div className="horizontalCardContainer mas" style={{ overflowX: 'scroll', whiteSpace: 'nowrap' }}>
+                                {
+                                    (productosMasVendidos === 0 ? (
+                                        <p>Cargando ...</p> // en caso que no haya cargado 
+                                    ) : (
+                                        productosMasVendidos.map((producto, indice) => // se recorre el arreglo para mostrar los elementos
+                                        (
+                                            <CardProducto key={indice} producto={producto} />    
+                                        )
+                                        )
+                                    ))
+                                }
+                            </div>
+                            <img onClick={() => handleScroll(300)} className='imagenPrev' src={next} alt="flecha correr hacia adelante" width="20rem" height="20rem" />
                         </div>
                     </div>
                 </div>
@@ -182,18 +186,9 @@ function Home() {
                             <p>Cargando ...</p> // en caso que no haya cargado 
                         ) : (
                             productosEnOferta.map((producto, indice) => // se recorre el arreglo para mostrar los elementos
-                                (
-                                <div className="card producto" key={indice}>
-                                    <img src={producto.img} alt=""></img>
-                                    {producto.name}
-
-                                    <span>{producto.NOMBRESUPERMERCADO}</span>
-
-                                    <button>
-                                        $ {producto.precio}
-                                    </button>
-                                </div>
-                                )
+                            (
+                                <CardProducto key={indice} producto={producto} />
+                            )
                             )
                         ))
                     }

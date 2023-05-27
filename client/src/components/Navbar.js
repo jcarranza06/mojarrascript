@@ -4,9 +4,9 @@ import logo from "../Logo.svg";
 import carrito from "../Iconos/Icons/carrito_compras.svg";
 import menuHam from "../Iconos/Icons/menu_hamburguesa.svg";
 import usuarioImg from "../Iconos/Icons/usuario.svg";
+import { Outlet, Link } from "react-router-dom";
 
-
-
+const baseURL = 'http://localhost:3000/';
 
 function Navbar() {
 
@@ -39,13 +39,31 @@ function Navbar() {
     arr = userName.split(' ');
     name = arr[0];
   }
-  console.log(userId,userName,userEmail,userPicture);
+  //console.log(userId,userName,userEmail,userPicture);
+  // se crea variable para la busqueda del input de navbar 
+  const [busqueda, setBusqueda] = useState("")
+
+  // funcion que detecta Intro en el input 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') { 
+      // 👇 Get input value
+      console.log(busqueda);
+      window.location.href = baseURL + 'preproducto?search='+busqueda;
+    }
+  };
+
+  // funcion que actualiza la variable busqueda cuando se escribe en el input 
+  const handleChange = event => {
+    setBusqueda(event.target.value)
+  }
 
   return (
     <nav className="navbar">
 
       <div className="navbar-logo">
-        <img src={logo} alt="Logo" />
+        <Link to="/">
+          <img src={logo} alt="Logo" />
+        </Link>
       </div>
       {/* MENU HAMBURGUESA */}
       <div onClick={handleClick} className="navbar-menu">
@@ -53,7 +71,7 @@ function Navbar() {
       </div>
       <div className="textCategorias">Categorías</div>
       <div className={`categorias ${clicked ? 'active' : '' }`}>
-          <ul>Lista de compras</ul>
+          <ul><Link to="/nuevaLista">Lista de compras</Link></ul>
           <ul>Historial</ul>
           <hr></hr>
           <li> Mercado </li>
@@ -69,7 +87,7 @@ function Navbar() {
 
       {/* SEARCH */}
       <div className="navbar-search">
-        <input type="text" placeholder="¿Qué estas buscando?" />
+        <input type="text" placeholder="¿Qué estas buscando?" onKeyDown={handleKeyDown} value={name} onChange={handleChange}/>
       </div>
 
       {/* EL SIGUIENTE FRAGMENTO DE CODIGO HACE LO SIGUIENTE */}
@@ -90,9 +108,11 @@ function Navbar() {
       {userName === null ? ( <div> <img src={ userPicture } alt=""  /> </div> ) : ( 
 
       <div className="userPicture"> 
-        <img clickedPerfil={clickedPerfil} handleClickPerfil={handleClickPerfil} onClick={handleClickPerfil} width='50em' src={userPicture} alt="imagen del usuario"/> 
+        {/*se borran atributos clickedPerfil y handleClickPerfil por no hacer nada 
+        <img clickedPerfil={clickedPerfil} handleClickPerfil={handleClickPerfil} onClick={handleClickPerfil} width='50em' src={userPicture} alt="imagen del usuario"/> */}
+        <img onClick={handleClickPerfil} width='50em' src={userPicture} alt="imagen del usuario"/>
         <div className={`perfil ${clickedPerfil ? 'active' : '' }`}>
-          <ul>Modificar cuenta</ul>
+          <ul> <Link to="/perfil">Modificar cuenta</Link></ul>
           <ul>Ajustes</ul>
         </div>
 
