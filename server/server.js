@@ -123,27 +123,27 @@ app.get('/comentarios', (req, res) => {
 });
 
 
-app.get('/getComentarios', (req, res) => {
-  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
-  var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+// app.get('/getComentarios', (req, res) => {
+//   var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+//   var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
 
-  con.connect(function (err) {// se abre la coneccion con la BD
-    if (err) throw err; // validacion de apertura
-    // Ruta para obtener todos los comentarios
+//   con.connect(function (err) {// se abre la coneccion con la BD
+//     if (err) throw err; // validacion de apertura
+//     // Ruta para obtener todos los comentarios
 
-    const sql = 'SELECT COMENTARIO, IDUSUARIO, IDPRODUCTO FROM COMENTARIO';
+//     const sql = 'SELECT COMENTARIO, IDUSUARIO, IDPRODUCTO FROM COMENTARIO';
 
-    con.query(sql, (err, results) => {
-      if (err) {
-        console.error('Error al obtener los comentarios:', err);
-        res.status(500).send('Error al obtener los comentarios');
-      } else {
-        console.log('Comentarios obtenidos correctamente');
-        res.status(200).json(results);
-      }
-    });
-  });
-});
+//     con.query(sql, (err, results) => {
+//       if (err) {
+//         console.error('Error al obtener los comentarios:', err);
+//         res.status(500).send('Error al obtener los comentarios');
+//       } else {
+//         console.log('Comentarios obtenidos correctamente');
+//         res.status(200).json(results);
+//       }
+//     });
+//   });
+// });
 
 
 app.get('/getProductosEnOferta', (req, res) => {
@@ -224,6 +224,170 @@ app.get('/searchProduct', (req, res) => {
     });
   }
   
+});
+
+app.get('/getComentarios/:productId', (req, res) => {
+  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+  var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+  const productId = req.params.productId;
+  const sql = `SELECT COMENTARIO, IDUSUARIO FROM comentarios WHERE productId = ?`;
+  const values = [productId];
+  con.connect(function(err) {
+    if (err) throw err;
+  con.query(sql, values, (err, result) => {
+    if (err) {
+      console.error('Error al obtener los comentarios:', err);
+      res.status(500).send('Error al obtener los comentarios');
+    } else {
+      console.log('Comentarios obtenidos correctamente');
+      res.status(200).json(result);
+    }
+
+  });
+});
+});
+
+
+//Ruta para crear una lista de compra
+app.post('/crearLista', (req, res) => {
+  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+  var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+
+  const userId = req.body.userId;
+  const sql = `INSERT INTO CARRITO (IDUSUARIO, FECHACREACION) VALUES (?, NOW())`;
+  const values = [userId];
+  con.connect(function(err) {
+    if (err) throw err;
+  con.query(sql, values, (err, result) => {
+    if (err) {
+      console.error('Error al crear la lista:', err);
+      res.status(500).send('Error al crear la lista');
+    } else {
+      console.log('Lista creada correctamente');
+      res.status(200).send('Lista creada correctamente');
+    }
+  });
+});
+});
+
+
+// // Ruta para eliminar una lista
+// app.delete('/eliminarLista/:carritoId', (req, res) => {
+//   var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+//   var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+
+//   const carritoId = req.params.carritoId;
+
+//   const sql = `DELETE FROM CARRITO WHERE IDCARRITO = ?`;
+//   const values = [carritoId];
+//   con.connect(function(err) {
+//     if (err) throw err;
+//   con.query(sql, values, (err, result) => {
+//     if (err) {
+//       console.error('Error al eliminar la lista:', err);
+//       res.status(500).send('Error al eliminar la lista');
+//     } else {
+//       console.log('Lista eliminado correctamente');
+//       res.status(200).send('Lista eliminado correctamente');
+//     }
+//   });
+// });
+// });
+
+
+
+// Ruta para eliminar un carrito y mover productos al historial
+
+app.delete('/eliminarLista/:carritoId', (req, res) => {
+  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+  var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+  const carritoId = req.params.carritoId;
+
+  // Consulta para eliminar la lista
+  const sqlDeleteCarrito = `DELETE FROM CARRITO WHERE IDCARRITO = ?`;
+  const deleteCarritoValues = [carritoId];
+
+  con.query(sqlDeleteCarrito, deleteCarritoValues, (err, result) => {
+    if (err) {
+      console.error('Error al eliminar la lista:', err);
+      res.status(500).send('Error al eliminar el carrito');
+    } else {
+      console.log('Lista eliminado correctamente');
+
+      // Consulta para obtener los productos del carrito antes de eliminarlo
+      const sqlSelectProductos = `SELECT IDPRODUCTO, IDUSUARIO FROM CLLEVAP WHERE IDCARRITO = ?`;
+      const selectProductosValues = [carritoId];
+
+      con.query(sqlSelectProductos, selectProductosValues, (err, results) => {
+        if (err) {
+          console.error('Error al obtener los productos de la lista:', err);
+          res.status(500).send('Error al obtener los productos de la lista');
+        } else {
+          const productos = results.map((row) => [row.IDPRODUCTO, row.IDUSUARIO]);
+
+          // Consulta para mover los productos al historial
+          const sqlInsertHistorial = `INSERT INTO HISTORIAL (IDPRODUCTO, IDUSUARIO, FECHABUSQUEDA) VALUES ?`;
+          const insertHistorialValues = productos.map((producto) => [...producto, new Date()]);
+
+          con.query(sqlInsertHistorial, [insertHistorialValues], (err, result) => {
+            if (err) {
+              console.error('Error al mover los productos al historial:', err);
+              res.status(500).send('Error al mover los productos al historial');
+            } else {
+              console.log('Productos movidos al historial correctamente');
+              res.status(200).send('Lista eliminada y productos movidos al historial correctamente');
+            }
+          });
+        }
+      });
+    }
+  });
+});
+
+
+// Ruta para insertar un producto en un carrito
+app.post('/insertarProducto', (req, res) => {
+  const carritoId = req.body.carritoId;
+  const productoId = req.body.productoId;
+
+  const sql = `INSERT INTO CLLEVAP (IDCARRITO, IDPRODUCTO) VALUES (?, ?)`;
+  const values = [carritoId, productoId];
+  con.connect(function(err) {
+    if (err) throw err;
+  con.query(sql, values, (err, result) => {
+    if (err) {
+      console.error('Error al insertar el producto en la lista:', err);
+      res.status(500).send('Error al insertar el producto en la lista');
+    } else {
+      console.log('Producto insertado correctamente en la lista');
+      res.status(200).send('Producto insertado correctamente en la lista');
+    }
+  });
+});
+});
+
+// Ruta para eliminar un producto de un carrito
+app.delete('/eliminarProducto/:carritoId/:productoId', (req, res) => {
+  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+  var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+
+  const carritoId = req.params.carritoId;
+  const productoId = req.params.productoId;
+
+  const sql = `DELETE FROM CLLEVAP WHERE IDCARRITO = ? AND IDPRODUCTO = ?`;
+  const values = [carritoId, productoId];
+  con.connect(function(err) {
+    if (err) throw err;
+  con.query(sql, values, (err, result) => {
+    if (err) {
+      console.error('Error al eliminar el producto del carrito:', err);
+      res.status(500).send('Error al eliminar el producto del carrito');
+    } else {
+      console.log('Producto eliminado correctamente del carrito');
+      res.status(200).send('Producto eliminado correctamente del carrito');
+    }
+  });
+});
 });
 
 /*
