@@ -389,3 +389,59 @@ app.delete('/eliminarProducto/:carritoId/:productoId', (req, res) => {
   });
 });
 });
+
+/*
+Funciones para historial de prods 
+*/ 
+
+
+//addToHistory: agrega producto al historial de un usuario, es necesario pasarle idUsuario: int y idProducto: int 
+// ejemplo de llamada:  http://localhost:5000/addToHistory?idUsuario=2&idProducto=4
+//devuelve: {"fieldCount":0,"affectedRows":1,"insertId":3,"info":"","serverStatus":2,"warningStatus":0}
+app.get('/addToHistory', (req, res) => {
+  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+  var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+  let idProducto = req.query.idProducto;
+  let idUsuario = req.query.idUsuario;
+  con.connect(function (err) {// se abre la coneccion con la BD
+    if (err) throw err; // validacion de apertura
+    con.query("INSERT INTO historial (IDBUSQUEDA, IDUSUARIO, IDPRODUCTO, FECHABUSQUEDA, TERMINOBUSQUEDA) VALUES (null, ?, ?, NOW(),'sumadre');", [idUsuario,idProducto], function (err, result, fields) { // se envía la petición a DB
+      if (err) throw err; // valida peticion enviada corrrectamente
+      res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
+    });
+  });
+});
+
+//getUserHistory: obtiene todos los productos del historial de un cliente, es necesario pasarle idUsuario: int  
+// ejemplo de llamada:  http://localhost:5000/getUserHistory?idUsuario=2
+//devuelve: [{"IDBUSQUEDA":1,"IDUSUARIO":2,"IDPRODUCTO":1,"FECHABUSQUEDA":"2023-06-06T05:00:00.000Z"},{"IDBUSQUEDA":2,"IDUSUARIO":2,"IDPRODUCTO":2,"FECHABUSQUEDA":"2023-06-06T14:41:11.000Z"}]
+app.get('/getUserHistory', (req, res) => {
+  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+  var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+  let idUsuario = req.query.idUsuario;
+  con.connect(function (err) {// se abre la coneccion con la BD
+    if (err) throw err; // validacion de apertura
+    con.query("SELECT IDBUSQUEDA, IDUSUARIO, IDPRODUCTO, FECHABUSQUEDA FROM tabla.historial where IDUSUARIO=?;", [idUsuario], function (err, result, fields) { // se envía la petición a DB
+      if (err) throw err; // valida peticion enviada corrrectamente
+      res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
+    });
+  });
+});
+
+//deleteFromUserHistory: obtiene todos los productos del historial de un cliente, es necesario pasarle idUsuario: int  
+//ejemplo de llamada:  http://localhost:5000/deleteFromUserHistory?idBusqueda=2
+//devuelve: {"fieldCount":0,"affectedRows":1,"insertId":0,"info":"","serverStatus":2,"warningStatus":0}
+app.get('/deleteFromUserHistory', (req, res) => {
+  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+  var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+  let idBusqueda = req.query.idBusqueda;
+  con.connect(function (err) {// se abre la coneccion con la BD
+    if (err) throw err; // validacion de apertura
+    con.query("DELETE FROM historial WHERE IDBUSQUEDA=?;", [idBusqueda], function (err, result, fields) { // se envía la petición a DB
+      if (err) throw err; // valida peticion enviada corrrectamente
+      res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
+    });
+  });
+});
+
+
