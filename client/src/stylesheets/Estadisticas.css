@@ -1,0 +1,59 @@
+/* Estilos generales */
+body {
+  font-family: "ABeeZee", sans-serif;
+  text-align: left;
+}
+
+/* Estilos para centrar elementos */
+.statistics-page {
+  display: grid;
+  justify-content: left;
+  align-items: left;
+  margin-right: 5rem;
+  margin-left: 1px;
+  height: 200vh;
+  margin: 50px;
+}
+
+/* Estilos adicionales para elementos específicos */
+h1 {
+  font-size: 2rem;
+}
+
+p {
+  font-size: 1.2rem;
+}
+
+.green-dollar {
+  color: green;
+}
+
+.yellow-star {
+  color: yellow;
+  font-size: 1.2em;
+  margin-left: 5px;
+}
+
+.chart {
+  display: flex;
+  position: center;
+  align-items: left;
+  top: 0;
+  left: 0;
+  width: 1000px;
+  height: 100%;
+  margin-right: 5rem;
+}
+
+.box {
+  width: 57px;
+  height: 12px;
+  border: 10px solid;
+  border-radius: 50px;
+  border-image: linear-gradient(to bottom, purple, pink) 1;
+  padding: 1px;
+  color: linear-gradient(to bottom, purple, pink) 1;;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+}

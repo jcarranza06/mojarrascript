@@ -8,6 +8,7 @@ import Footer from './components/footer';
 
 import PreProducto from './components/PreProducto';
 import Perfil from './components/Perfil';
+import Estadisticas from './components/Estadisticas';
 
 import VerProducto from './components/VerProducto';
 import PaginaNoEncontrada from './components/PaginaNoEncontrada';
@@ -29,6 +30,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />}/>
         <Route path='/perfil' element={<Perfil/>}/>
+        <Route path='/estadisticas' element={<Estadisticas/>}/>
         <Route path='/producto' element={<VerProducto/>}/>
         <Route path='/preProducto' element={<PreProducto/>}/>
         <Route path='/nuevaLista' element={<CrearLista/>}/>
