@@ -72,6 +72,7 @@ function Navbar() {
       <div className="textCategorias">Categorías</div>
       <div className={`categorias ${clicked ? 'active' : '' }`}>
           <ul><Link to="/nuevaLista">Lista de compras</Link></ul>
+          <ul><Link to="/estadisticas">Estadisticas</Link></ul>
           <ul>Historial</ul>
           <hr></hr>
           <li> Mercado </li>
