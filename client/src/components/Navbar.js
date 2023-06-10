@@ -4,7 +4,7 @@ import logo from "../Logo.svg";
 import carrito from "../Iconos/Icons/carrito_compras.svg";
 import menuHam from "../Iconos/Icons/menu_hamburguesa.svg";
 import usuarioImg from "../Iconos/Icons/usuario.svg";
-import { Outlet, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const baseURL = 'http://localhost:3000/';
 
@@ -48,7 +48,7 @@ function Navbar() {
     if (event.key === 'Enter') { 
       // 👇 Get input value
       console.log(busqueda);
-      window.location.href = baseURL + 'preproducto?search='+busqueda;
+      window.location.href = baseURL + 'preproducto?search='+busqueda+'&userId='+userId+'&userName='+userName+'&userEmail='+userEmail+'&userPicture='+userPicture;
     }
   };
 
@@ -88,7 +88,7 @@ function Navbar() {
 
       {/* SEARCH */}
       <div className="navbar-search">
-        <input type="text" placeholder="¿Qué estas buscando?" onKeyDown={handleKeyDown} value={name} onChange={handleChange}/>
+        <input type="text" placeholder="¿Qué estas buscando?" onKeyDown={handleKeyDown} onChange={handleChange}/>
       </div>
 
       {/* EL SIGUIENTE FRAGMENTO DE CODIGO HACE LO SIGUIENTE */}

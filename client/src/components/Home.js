@@ -6,10 +6,9 @@ import "../stylesheets/Home.css"; // import your navbar styles
 import prev from "../Iconos/Icons/prev.png";
 import next from "../Iconos/Icons/next.png";
 import CardProducto from './CardProducto.js';
-import {
-    Link,
+/*import {
     useNavigate
-} from "react-router-dom";
+} from "react-router-dom";*/
 
 const iconosFolder = require.context("../Iconos", true)
 
@@ -100,6 +99,7 @@ function Home() {
 
     // se usa useEffect((),[]) sin parametros para solo hacer una vez la consulta a la BD, no se debe hacer cada vez que se renderice
     useEffect(() => {
+        
         getProductosEnOferta();
     }, []);
     //setProductosEnOferta(prods);
@@ -119,11 +119,11 @@ function Home() {
 
     };
 
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
 
-    const toProducto = (id) => {
+    /*const toProducto = (id) => {
         navigate('/producto', { state: { idProducto: id } });
-    }
+    }*/
 
     return (
         <div className="home">

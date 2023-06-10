@@ -7,7 +7,7 @@ function Comentario(props) {
     return (
         <div className="comentario">
             <div className="comentarioImg">
-            <img src={iconosFolder(props.img)} alt="imagen producto"></img>
+            {/*<img src={iconosFolder(props.img)} alt="imagen producto"></img>*/}
             </div>
             <div className="comentarioStr">
                 {props.text}

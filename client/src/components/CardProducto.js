@@ -1,8 +1,7 @@
 import React from 'react'
 import "../stylesheets/Home.css"; // import your navbar styles
 import {
-    Link,
-    useNavigate
+    Link
 } from "react-router-dom";
 
 function CardProducto(props) {

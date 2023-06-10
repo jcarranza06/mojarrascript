@@ -3,7 +3,7 @@ const app = express();
 const cors = require("cors");
 const { auth } = require("express-openid-connect");
 require("dotenv").config();
-
+const bodyParser = require('body-parser');
 
 const config = {
   authRequired: false,
@@ -18,7 +18,7 @@ const config = {
 app.use(auth(config));
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-
+app.use(bodyParser.json());
 // allow cross-origin requests
 app.use(
   cors({
@@ -53,12 +53,12 @@ app.get('/', (req, res) => {
     var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
     var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
 
-    /*con.connect(function (err) {// se abre la coneccion con la BD
+    con.connect(function (err) {// se abre la coneccion con la BD
       if (err) throw err; // validacion de apertura
-      con.query("INSERT INTO usuario (IDUSUARIO,NOMBREUSUARIO,EMAILUSUARIO) VALUES (?,?,?) ON duplicate KEY UPDATE ULTIMACONEXION=current_timestamp();",[userId,userName,userEmail], function (err, result, fields) { // se envía la petición a DB
+      con.query("INSERT INTO usuario (NOMBREUSUARIO,EMAILUSUARIO,FECHAREGISTRO,ULTIMACONEXION,IDAUTH0) VALUES (?,?,NOW(),NOW(),?) ON duplicate KEY UPDATE ULTIMACONEXION=current_timestamp();", [userName, userEmail, userId], function (err, result, fields) { // se envía la petición a DB
         if (err) throw err; // valida peticion enviada corrrectamente
       });
-    });*/
+    });
 
 
     // Redirigir al usuario a localhost:3000 con los datos del usuario como parámetros de consulta
@@ -68,7 +68,29 @@ app.get('/', (req, res) => {
   }
 });
 
+app.get('/userId', (req, res) => {
+  if (req.oidc.isAuthenticated()) {
+    // Acceder a los datos del usuario autenticado
+    const user = req.oidc.user;
 
+    // Extraer información específica del usuario
+    const userId = user.sub; // ID del usuario
+    const userName = user.name; // Nombre del usuario
+    //const userEmail = user.email; // Email del usuario
+    //const userPicture = user.picture; // URL de la imagen del usuario
+    var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+    var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+    con.connect(function (err) {// se abre la coneccion con la BD
+      if (err) throw err; // validacion de apertura
+      con.query("SELECT IDUSUARIO FROM tabla.usuario WHERE IDAUTH0=?;", [userId], function (err, result, fields) { // se envía la petición a DB
+        if (err) throw err; // valida peticion enviada corrrectamente
+        res.send(JSON.stringify({userId: result[0].IDUSUARIO, userName: userName})); // se imprime en pantalla el resultado de la consulta
+      });
+    });
+  } else {
+    res.send({status:'not auth'})
+  }
+});
 
 // Estpo es un API, sirve porque la BD normalmente y por seguridad está configurada para recibir solicitudes
 // desde la misma red por lo cual la API permite ser un puente entre elementos que están en una red no local  
@@ -204,17 +226,17 @@ app.get('/searchProduct', (req, res) => {
         res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
       });
     });
-  }else{
-    let rangoPrecio = {min: req.query.min, max: req.query.max}
+  } else {
+    let rangoPrecio = { min: req.query.min, max: req.query.max }
     let order = Number(req.query.order);
     let querySql;
-    if (order == 0){
-      querySql= "SELECT P.NOMBREPRODUCTO as 'name', P.IDPRODUCTO, P.IMAGENPRODUCTO as 'img', M.NOMBRESUPERMERCADO, P.PRECIOPRODUCTO as 'precio' FROM PRODUCTO P JOIN SUPERMERCADO M ON P.IDSUPERMERCADO = M.IDSUPERMERCADO WHERE (LOWER(P.NOMBREPRODUCTO)  LIKE ? AND P.PRECIOPRODUCTO>=? AND P.PRECIOPRODUCTO <=?);";
-    }else{
-      let o = order == 1 ? 'DESC':'ASC';
-      querySql= "SELECT P.NOMBREPRODUCTO as 'name', P.IDPRODUCTO, P.IMAGENPRODUCTO as 'img', M.NOMBRESUPERMERCADO, P.PRECIOPRODUCTO as 'precio' FROM PRODUCTO P JOIN SUPERMERCADO M ON P.IDSUPERMERCADO = M.IDSUPERMERCADO WHERE (LOWER(P.NOMBREPRODUCTO)  LIKE ? AND P.PRECIOPRODUCTO>=? AND P.PRECIOPRODUCTO <=?) ORDER BY P.PRECIOPRODUCTO "+o+";";
+    if (order == 0) {
+      querySql = "SELECT P.NOMBREPRODUCTO as 'name', P.IDPRODUCTO, P.IMAGENPRODUCTO as 'img', M.NOMBRESUPERMERCADO, P.PRECIOPRODUCTO as 'precio' FROM PRODUCTO P JOIN SUPERMERCADO M ON P.IDSUPERMERCADO = M.IDSUPERMERCADO WHERE (LOWER(P.NOMBREPRODUCTO)  LIKE ? AND P.PRECIOPRODUCTO>=? AND P.PRECIOPRODUCTO <=?);";
+    } else {
+      let o = order == 1 ? 'DESC' : 'ASC';
+      querySql = "SELECT P.NOMBREPRODUCTO as 'name', P.IDPRODUCTO, P.IMAGENPRODUCTO as 'img', M.NOMBRESUPERMERCADO, P.PRECIOPRODUCTO as 'precio' FROM PRODUCTO P JOIN SUPERMERCADO M ON P.IDSUPERMERCADO = M.IDSUPERMERCADO WHERE (LOWER(P.NOMBREPRODUCTO)  LIKE ? AND P.PRECIOPRODUCTO>=? AND P.PRECIOPRODUCTO <=?) ORDER BY P.PRECIOPRODUCTO " + o + ";";
     }
-    
+
     con.connect(function (err) {// se abre la coneccion con la BD
       if (err) throw err; // validacion de apertura
       con.query(querySql, [search, rangoPrecio.min, rangoPrecio.max], function (err, result, fields) { // se envía la petición a DB
@@ -223,28 +245,28 @@ app.get('/searchProduct', (req, res) => {
       });
     });
   }
-  
+
 });
 
 app.get('/getComentarios/:productId', (req, res) => {
   var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
   var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
   const productId = req.params.productId;
-  const sql = `SELECT COMENTARIO, IDUSUARIO FROM comentarios WHERE productId = ?`;
+  const sql = `SELECT COMENTARIO, IDUSUARIO, FECHACOMENTARIO FROM comentario WHERE IDPRODUCTO = ?;`;
   const values = [productId];
-  con.connect(function(err) {
+  con.connect(function (err) {
     if (err) throw err;
-  con.query(sql, values, (err, result) => {
-    if (err) {
-      console.error('Error al obtener los comentarios:', err);
-      res.status(500).send('Error al obtener los comentarios');
-    } else {
-      console.log('Comentarios obtenidos correctamente');
-      res.status(200).json(result);
-    }
+    con.query(sql, values, (err, result) => {
+      if (err) {
+        //console.error('Error al obtener los comentarios:', err);
+        res.status(500).send('Error al obtener los comentarios');
+      } else {
+        //console.log('Comentarios obtenidos correctamente');
+        res.status(200).json(result);
+      }
 
+    });
   });
-});
 });
 
 
@@ -256,18 +278,18 @@ app.post('/crearLista', (req, res) => {
   const userId = req.body.userId;
   const sql = `INSERT INTO CARRITO (IDUSUARIO, FECHACREACION) VALUES (?, NOW())`;
   const values = [userId];
-  con.connect(function(err) {
+  con.connect(function (err) {
     if (err) throw err;
-  con.query(sql, values, (err, result) => {
-    if (err) {
-      console.error('Error al crear la lista:', err);
-      res.status(500).send('Error al crear la lista');
-    } else {
-      console.log('Lista creada correctamente');
-      res.status(200).send('Lista creada correctamente');
-    }
+    con.query(sql, values, (err, result) => {
+      if (err) {
+        console.error('Error al crear la lista:', err);
+        res.status(500).send('Error al crear la lista');
+      } else {
+        console.log('Lista creada correctamente');
+        res.status(200).send('Lista creada correctamente');
+      }
+    });
   });
-});
 });
 
 
@@ -352,18 +374,18 @@ app.post('/insertarProducto', (req, res) => {
 
   const sql = `INSERT INTO CLLEVAP (IDCARRITO, IDPRODUCTO) VALUES (?, ?)`;
   const values = [carritoId, productoId];
-  con.connect(function(err) {
+  con.connect(function (err) {
     if (err) throw err;
-  con.query(sql, values, (err, result) => {
-    if (err) {
-      console.error('Error al insertar el producto en la lista:', err);
-      res.status(500).send('Error al insertar el producto en la lista');
-    } else {
-      console.log('Producto insertado correctamente en la lista');
-      res.status(200).send('Producto insertado correctamente en la lista');
-    }
+    con.query(sql, values, (err, result) => {
+      if (err) {
+        console.error('Error al insertar el producto en la lista:', err);
+        res.status(500).send('Error al insertar el producto en la lista');
+      } else {
+        console.log('Producto insertado correctamente en la lista');
+        res.status(200).send('Producto insertado correctamente en la lista');
+      }
+    });
   });
-});
 });
 
 // Ruta para eliminar un producto de un carrito
@@ -376,23 +398,23 @@ app.delete('/eliminarProducto/:carritoId/:productoId', (req, res) => {
 
   const sql = `DELETE FROM CLLEVAP WHERE IDCARRITO = ? AND IDPRODUCTO = ?`;
   const values = [carritoId, productoId];
-  con.connect(function(err) {
+  con.connect(function (err) {
     if (err) throw err;
-  con.query(sql, values, (err, result) => {
-    if (err) {
-      console.error('Error al eliminar el producto del carrito:', err);
-      res.status(500).send('Error al eliminar el producto del carrito');
-    } else {
-      console.log('Producto eliminado correctamente del carrito');
-      res.status(200).send('Producto eliminado correctamente del carrito');
-    }
+    con.query(sql, values, (err, result) => {
+      if (err) {
+        console.error('Error al eliminar el producto del carrito:', err);
+        res.status(500).send('Error al eliminar el producto del carrito');
+      } else {
+        console.log('Producto eliminado correctamente del carrito');
+        res.status(200).send('Producto eliminado correctamente del carrito');
+      }
+    });
   });
-});
 });
 
 /*
 Funciones para historial de prods 
-*/ 
+*/
 
 
 //addToHistory: agrega producto al historial de un usuario, es necesario pasarle idUsuario: int y idProducto: int 
@@ -405,7 +427,7 @@ app.get('/addToHistory', (req, res) => {
   let idUsuario = req.query.idUsuario;
   con.connect(function (err) {// se abre la coneccion con la BD
     if (err) throw err; // validacion de apertura
-    con.query("INSERT INTO historial (IDBUSQUEDA, IDUSUARIO, IDPRODUCTO, FECHABUSQUEDA, TERMINOBUSQUEDA) VALUES (null, ?, ?, NOW(),'sumadre');", [idUsuario,idProducto], function (err, result, fields) { // se envía la petición a DB
+    con.query("INSERT INTO historial (IDBUSQUEDA, IDUSUARIO, IDPRODUCTO, FECHABUSQUEDA, TERMINOBUSQUEDA) VALUES (null, ?, ?, NOW(),'sumadre');", [idUsuario, idProducto], function (err, result, fields) { // se envía la petición a DB
       if (err) throw err; // valida peticion enviada corrrectamente
       res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
     });
@@ -444,4 +466,83 @@ app.get('/deleteFromUserHistory', (req, res) => {
   });
 });
 
+//funcion que retorna hash para contraseña
+function generateMD5Hash(password) {
+  let hash = '';
+  try {
+    const crypto = require('crypto');
+    const md5sum = crypto.createHash('md5');
+    md5sum.update(password);
+    hash = md5sum.digest('hex');
+  } catch (error) {
+    console.error('Error:', error);
+  }
+  return hash;
+}
 
+
+//getUserHistory: obtiene todos los productos del historial de un cliente, es necesario pasarle idUsuario: int  
+//ejemplo de llamada:  http://localhost:5000/getUserHistory?idUsuario=2
+//devuelve: [{"IDBUSQUEDA":1,"IDUSUARIO":2,"IDPRODUCTO":1,"FECHABUSQUEDA":"2023-06-06T05:00:00.000Z"},{"IDBUSQUEDA":2,"IDUSUARIO":2,"IDPRODUCTO":2,"FECHABUSQUEDA":"2023-06-06T14:41:11.000Z"}]
+app.post('/uploadProducts', (req, res) => {
+  // se va a comparar el hash de la contraseña del usuario con este
+  const password = '2f641e3139402a66caa449ba98cc9f01';//generateMD5Hash('U6hfsS2ZT4G9Ux8x')
+  console.log(password)
+  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+  var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+  //let productsJson = req.body.data;
+  let products = req.body.data;
+  let Userpassword = req.body.pass;
+  products = JSON.parse(products)
+
+  if (password != generateMD5Hash(Userpassword)) {
+    res.send(JSON.stringify({ message: 'wrong password' })); // se imprime en pantalla el resultado de la consulta
+  } else {
+    //console.log('mostrandoProds')
+    //console.log(products)
+    //products = JSON.parse(productsJson)
+    //console.log(products, products.length)
+
+    // al enviarse una cierta cantidad de consultas a la bd, es necesario saber si todas finalizaron, por eso se verifica con
+    // validate end que hayan finalizado la misma cantidad de consultas que se crearon 
+    i = 0;
+    function validateEnd() {
+      i++
+      //console.log("i: ", i, " l: ", products.length)
+      if (i == products.length) {
+        res.send(JSON.stringify({ message: 'success' })); // se imprime en pantalla el resultado de la consulta
+      }
+    }
+    con.connect(function (err) {// se abre la coneccion con la BD
+      marketCodes = {
+        'Carulla': 1,
+        'D1': 2,
+        'Ara': 3,
+        'Jumbo': 4,
+        'Exito': 5
+      }
+      if (err) throw err; // validacion de apertura
+      products.forEach(element => {
+        console.log(element)
+        urlImage = decodeURIComponent(element['image'])
+        con.query("SELECT IDPRODUCTO FROM tabla.producto WHERE NOMBREPRODUCTO = ? AND IMAGENPRODUCTO = ? AND IDSUPERMERCADO = ?;", [element['name'], urlImage, marketCodes[element['market']]], function (err, result, fields) { // se envía la petición a DB
+          if (err) throw err; // valida peticion enviada corrrectamente
+          console.log('res: ', result)
+          // en caso de que el producto no este en la BD, se va a subir
+          if (result.length < 1) {
+            con.query("INSERT INTO `tabla`.`producto` (`IDSUPERMERCADO`, `NOMBREPRODUCTO`, `IMAGENPRODUCTO`, `PRECIOPRODUCTO`) VALUES (?, ?, ?, ?);", [marketCodes[element['market']], element['name'], urlImage, element['price']], function (err, result, fields) {
+              //console.log(result)
+              validateEnd()
+            })
+          } else { //en caso que el producto ya este en la bd se va a actualizar el precio de la primera aparicion de este en la BD
+            console.log("updateing: ", result[0].IDPRODUCTO)
+            con.query("UPDATE `tabla`.`producto` SET `PRECIOPRODUCTO` = ? WHERE (`IDPRODUCTO` = ?);", [element['price'], result[0].IDPRODUCTO], function (err, result, fields) {
+              //console.log(result)
+              validateEnd()
+            })
+          }
+        });
+      });
+    });
+  }
+});
