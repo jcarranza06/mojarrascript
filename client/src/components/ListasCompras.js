@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import "../stylesheets/ListasCompras.css"; // import your ListasCompras styles
-
+import { Link } from 'react-router-dom';
 export function List() {
   return (
     <list className="List">
@@ -12,10 +12,16 @@ export function List() {
   )
 }
 
-export function NewLista() {
+export function NewLista({listasDB,idListas}) {
   const [nuevaLista, setNuevaLista] = useState('');
-  const [listas, setListas] = useState(['Favoritos']);
   const [eliminarActivado, setEliminarActivado] = useState(false);
+  const [listas, setListas] = useState([]);
+  const [ids, setIds] = useState([]);
+
+  useEffect(() => {
+    setListas(listasDB);
+    setIds(idListas);
+  }, [listasDB,idListas]);
 
   function crearListaDeCompras() {
     if (nuevaLista.trim() !== '') {
@@ -45,15 +51,10 @@ export function NewLista() {
   return (
     <div className="new-lista-container">
       <ul className="lista-compras">
-        <li>
-          <strong>
-            <span className="bullet"></span>
-            {listas[0]}
-          </strong>
-        </li>
-        {listas.slice(1).map((lista, index) => (
-          <li key={index + 1} onClick={() => eliminarListaDeCompras(index + 1)}>
-            {lista}
+        
+        {listas.map((lista, index) => (
+          <li key={index + 1} >
+            <Link to={`/listas/${ids[index]}/${lista}`}>{lista}</Link>
           </li>
         ))}
       </ul>

@@ -2,7 +2,7 @@
 import Home from './components/Home';
 import CrearLista from './components/CrearLista';
 import Navbar from './components/Navbar';
-
+import ListaProductos from './components/ListaProductos';
 import Footer from './components/footer';
 
 import PreProducto from './components/PreProducto';
@@ -29,6 +29,7 @@ function App() {
         <Route path='/producto' element={<VerProducto/>}/>
         <Route path='/preProducto' element={<PreProducto/>}/>
         <Route path='/nuevaLista' element={<CrearLista/>}/>
+        <Route path='/listas/:id/:nombreLista' element={<ListaProductos/>} />
         <Route path='/uploadProductos' element={<UploadProducts/>}/>
         <Route path='*' element={<PaginaNoEncontrada/>}/>
       </Routes>
