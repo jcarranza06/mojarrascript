@@ -5,17 +5,17 @@ const { auth } = require("express-openid-connect");
 require("dotenv").config();
 const bodyParser = require('body-parser');
 
-const config = {
+/*const config = {
   authRequired: false,
   auth0Logout: true,
   secret: process.env.SECRET,
   baseURL: process.env.BASEURL,
   clientID: process.env.CLIENTID,
   issuerBaseURL: process.env.ISSUER,
-};
+};*/
 
 // Middleware
-app.use(auth(config));
+//app.use(auth(config));
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(bodyParser.json());
@@ -40,7 +40,7 @@ app.listen(5000, () => {
 porfa verifique que funciona correctamente 
 */
 app.get('/', (req, res) => {
-  if (req.oidc.isAuthenticated()) {
+  /*if (req.oidc.isAuthenticated()) {
     // Acceder a los datos del usuario autenticado
     const user = req.oidc.user;
 
@@ -65,10 +65,11 @@ app.get('/', (req, res) => {
     res.redirect(`http://localhost:3000/?userId=${userId}&userName=${userName}&userEmail=${userEmail}&userPicture=${userPicture}`);
   } else {
     res.send('Log in');
-  }
+  }*/
+  res.send('tamo activo');
 });
 
-app.get('/userId', (req, res) => {
+/*app.get('/userId', (req, res) => {
   if (req.oidc.isAuthenticated()) {
     // Acceder a los datos del usuario autenticado
     const user = req.oidc.user;
@@ -90,7 +91,7 @@ app.get('/userId', (req, res) => {
   } else {
     res.send({status:'not auth'})
   }
-});
+});*/
 
 // Estpo es un API, sirve porque la BD normalmente y por seguridad está configurada para recibir solicitudes
 // desde la misma red por lo cual la API permite ser un puente entre elementos que están en una red no local  
@@ -122,23 +123,48 @@ app.get('/userId', (req, res) => {
 //   });
 // });
 
+//se agrega o se modifica ultima hora de coneccion de usuario
+app.get('/getUser', (req, res) => {
+  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+  var con = conn.con();
+  let idAuth = req.query.idAuth;
+  let name = req.query.name;
+  let email = req.query.email;
+  con.query("SELECT IDUSUARIO FROM USUARIO WHERE IDAUTH0 = ?;", [idAuth], function (err, result, fields) { // se envía la petición a DB
+    if (err) throw err; // valida peticion enviada corrrectamente
+
+    // en caso de que el producto no este en la BD, se va a subir
+    if (result.length < 1) {
+      //console.log('agre')
+      con.query("INSERT INTO USUARIO (NOMBREUSUARIO,EMAILUSUARIO,FECHAREGISTRO,ULTIMACONEXION,IDAUTH0) VALUES (?,?,NOW(),NOW(),?)", [name, email, idAuth], function (err, result1, fields) {
+        res.send(JSON.stringify({ id: result1.insertId, response: result1 })); // se imprime en pantalla el resultado de la consulta
+      })
+    } else { //en caso que el producto ya este en la bd se va a actualizar el precio de la primera aparicion de este en la BD
+      //console.log("updateing: ", result[0].IDUSUARIO)
+      con.query("UPDATE USUARIO SET ULTIMACONEXION = NOW() WHERE (IDUSUARIO = ?);", [result[0].IDUSUARIO], function (err, result1, fields) {
+        res.send(JSON.stringify({ id: result[0].IDUSUARIO, response: result1 })); // se imprime en pantalla el resultado de la consulta
+      })
+    }
+  });
+});
+
 // Ruta para recibir los comentarios del frontend y guardarlos en la base de datos
 app.get('/comentarios', (req, res) => {
   var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
   var con = conn.con();
-  const { comentId, userId, productId, comentario } = req.body;
-
-  const sql = `INSERT INTO COMENTARIO (IDCOMENTARIO, IDUSUARIO, IDPRODUCTO, COMENTARIO) VALUES (?, ?, ?, ?)`;
-  const values = [comentId, userId, productId, comentario];
+  const userId = req.query.userId, productId= req.query.productId, comentario = req.query.comentario ;
+  console.log(userId,productId,comentario)
+  const sql = `INSERT INTO COMENTARIO (IDUSUARIO, IDPRODUCTO, COMENTARIO) VALUES (?, ?, ?)`;
+  const values = [userId, productId, comentario];
   con.connect(function (err) {
     if (err) throw err;
     con.query(sql, values, (err, result) => {
       if (err) {
         console.error('Error al insertar el comentario:', err);
-        res.status(500).send('Error al insertar el comentario');
+        res.status(500).send(JSON.stringify('Error al insertar el comentario'));
       } else {
         console.log('Comentario insertado correctamente');
-        res.status(200).send('Comentario insertado correctamente');
+        res.status(200).send(JSON.stringify('Comentario insertado correctamente'));
       }
     });
   });
