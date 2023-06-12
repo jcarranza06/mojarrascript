@@ -1,18 +1,12 @@
 /* Estilos generales */
-body {
-  font-family: "ABeeZee", sans-serif;
-  text-align: left;
-}
+
 
 /* Estilos para centrar elementos */
 .statistics-page {
-  display: grid;
   justify-content: left;
-  align-items: left;
-  margin-right: 5rem;
-  margin-left: 1px;
-  height: 200vh;
-  margin: 50px;
+  margin-right: 5vw;
+  margin-left: 5vw;
+  
 }
 
 /* Estilos adicionales para elementos específicos */
@@ -35,16 +29,35 @@ p {
 }
 
 .chart {
-  display: flex;
-  position: center;
-  align-items: left;
-  top: 0;
-  left: 0;
-  width: 1000px;
-  height: 100%;
-  margin-right: 5rem;
+  max-width: 90vw;
 }
-
+.bars-chart{
+  display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+}
+.bar-1, .bar-2
+{
+  max-width: 90vw;
+  width: 400px;
+  
+}
+.pies-chart{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.pies-1, .pies-2
+{
+  max-width: 90vw;
+  width: 300px;
+  height: 300px;
+  margin-bottom: 50px;
+}
+.contenedor{
+}
+.contenedor-productos-comprados{
+}
 .box {
   width: 57px;
   height: 12px;
