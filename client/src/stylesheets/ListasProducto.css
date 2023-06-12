@@ -1,13 +1,100 @@
+.titulo-lista-producto{
+    font-weight: 600;
+    font-size: 4vh;
+}
+.titulo-lista-producto span {
+    background: linear-gradient(90.17deg, #8C43E6 6.72%, #EF8D6D 54.47%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.contenedor-lista-productos{
+    margin-left: 3vw;
+    margin-right: 3vw;
+}
 .productos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    grid-gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(341px, 1fr));
+    grid-gap: 10px;
 }
   
 .producto-card {
     border: 1px solid #ccc;
-    padding: 20px;
+    padding: 5px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
+    backdrop-filter: blur(2px);
+    width: 341px; 
+    height: 8vh;
+    
+    
+}
+.producto-card .nombre-producto
+{
+    font-weight: 500;
+    margin: 0%;
+    font-size: 15px;
+    
 }
 .linea{
-    color: rebeccapurple;
+    align-self: center;
+    margin-top: 10vh;
+    border-bottom: 1px solid black;
 }
+.contenedor-precio-logo{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.contenedor-precio-logo img{
+    width: 5vh;
+    height: 5vh;
+    align-self: flex-end;
+}
+.precio{
+    width: fit-content;
+    margin:2vh 0 0 0;
+    background: linear-gradient(90.17deg, #8C43E6 6.72%, #EF8D6D 54.47%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 3vh;
+    align-self: flex-start;
+    font-weight: 600;
+}
+.totales
+{
+    margin-top: 3vh;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    
+}
+.totales div
+{
+    color: black;
+    font-weight: 600;
+}
+.ahorro
+{
+    margin-left: 5vw;
+}
+.ahorro-total
+{
+    background: linear-gradient(90deg, #984CDB 0%, #EF8D6D 100%);
+    color: white;
+    font-weight: 600;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 1px solid #2d2d2d;
+    border-radius: 7px;
+}
+.enviar-button
+{
+    margin-top: 3vh;
+    background: linear-gradient(90deg, #984CDB 0%, #EF8D6D 100%);
+    border: 1px solid #2d2d2d;
+    border-radius: 7px;
+    margin-bottom: 2vh;
+    font-weight: 600;
+}
+
+/*1920 -1337*/

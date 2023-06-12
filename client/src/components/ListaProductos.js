@@ -37,26 +37,34 @@ function ListaProductos() {
         });
 }
   return (
-    <div>
-      <h2>lista de compras {nombreLista}</h2>
+    <div className='contenedor-lista-productos'>
+      <h2 className='titulo-lista-producto'>lista de compras <span> {nombreLista}</span></h2>
       <div className='productos-grid' >
         {producto.map((product) => {
-          PrecioTotal+=Number(product.PRECIOPRODUCTO);
+          let precio = Number(product.PRECIOPRODUCTO);
+          let precioSinDecimales = parseInt(precio.toFixed(2));
+          PrecioTotal+=precioSinDecimales;
           return(
-            <div key={product.id} clasName ="producto-card" >
-              <h3>{product.NOMBREPRODUCTO}</h3>
-              <p>{product.PRECIOPRODUCTO}</p>
-              <img src={product.LOGOSUPERMERCADO} alt="Logo supermercado" />
+            <div key={product.id} className ='producto-card' >
+              <p className='nombre-producto'>{product.NOMBREPRODUCTO}</p>
+              <div className='contenedor-precio-logo'>
+                <p className='precio'> $ {precioSinDecimales}</p>
+                <img src={product.LOGOSUPERMERCADO} alt="Logo supermercado" />
+            
+              </div>
             </div>
           );
           
         })}
       </div>
-      <hr className='linea'/>
-      <div>
-        <div>Precio Total: {PrecioTotal}</div>
-        <div>Ahorro Total: {ahorroTotal}</div>
+      <div className='linea'/>
+      <div className='totales'>
+        <div>Precio Total: <span className='precio'>$ {PrecioTotal}</span> </div>
+        <div className='ahorro'>Ahorro Total: <span className='ahorro-total'>${ahorroTotal}</span></div>
       </div>
+      <button className='enviar-button'>
+        Enviar Lista a Historial
+      </button>
     </div>
   );
 }

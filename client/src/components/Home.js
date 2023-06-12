@@ -109,7 +109,7 @@ function Home() {
     }, []);
 
 
-    const [scrollAmount, setScrollAmount] = useState(0);
+    const [scrollAmount, setScrollAmount] = useState(-700);
 
     const handleScroll = (scrollOffset) => {
         const container = document.querySelector('.horizontalCardContainer.mas');
@@ -162,7 +162,7 @@ function Home() {
                         <h1>Lo más comprado</h1>
                         <div className='productosMasComprados'>
                             <img onClick={() => handleScroll(-300)} className='imagenPrev' src={prev} alt="flecha correr hacia atras" width="20rem" height="20rem" />
-                            <div className="horizontalCardContainer mas" style={{ overflowX: 'scroll', whiteSpace: 'nowrap' }}>
+                            <div className="horizontalCardContainer mas" style={{ overflowX: 'scroll'}}>
                                 {
                                     (productosMasVendidos === 0 ? (
                                         <p>Cargando ...</p> // en caso que no haya cargado 

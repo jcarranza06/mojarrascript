@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, {useState, useRef,useEffect} from "react";
+import { useLocation } from 'react-router-dom';
+
 import "../stylesheets/Navbar.css"; // import your navbar styles
 import logo from "../Logo.svg";
 import carrito from "../Iconos/Icons/carrito_compras.svg";
@@ -16,10 +18,14 @@ function Navbar() {
   if (isAuthenticated) { console.log(user) }
   // Hook para manejar el click del menu hamburguesa
   const [clicked, setClicked] = useState(false);
-  const handleClick = () => {
-    setClicked(!clicked);
-  }
+  const location = useLocation();
 
+  const handleClick = () => {
+    console.log("handleclick")
+    setClicked(!clicked);
+    console.log(clicked)
+  }
+  
   // Hook para el manejo del click de ver perfil
   const [clickedPerfil, setClickedPerfil] = useState(false);
   const handleClickPerfil = () => {
@@ -62,9 +68,31 @@ function Navbar() {
     setBusqueda(event.target.value)
   }
 
-  /*if(redirectPreProducto){
-    return <Redirect to={'/preproducto?search=' + busqueda} />;
-  }*/
+
+  useEffect(() => {
+    setClicked(false);
+  }, [location]);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      const menu = document.getElementById('menu-hambur');
+      const menuButton = document.getElementById('menu');
+      console.log(!menu.contains(event.target))
+      console.log(clicked)
+      if (menu && !menu.contains(event.target) && !menuButton.contains(event.target) && clicked) {
+        console.log("entrooo")
+        setClicked(false);
+      }
+    }
+    
+    if(clicked){
+      document.addEventListener('click', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [clicked]);
+
 
   return (
     <nav className="navbar">
@@ -76,25 +104,27 @@ function Navbar() {
         </Link>
       </div>
       {/* MENU HAMBURGUESA */}
-      <div onClick={handleClick} className="navbar-menu">
+      <div id="menu" onClick={handleClick} className="navbar-menu">
         <img src={menuHam} alt="menu hamburguesa" />
       </div>
       <div className="textCategorias">Categorías</div>
-      <div className={`categorias ${clicked ? 'active' : ''}`}>
-        <ul><Link to="/nuevaLista">Lista de compras</Link></ul>
-        <ul><Link to="/estadisticas">Estadisticas</Link></ul>
-        <ul>Historial</ul>
-        <hr></hr>
-        <li> Mercado </li>
-        <li> Lacteos </li>
-        <li> Despensa </li>
-        <li> Frutas y verduras </li>
-        <li> Licores </li>
-        <li> Bebidas </li>
-        <li> Panaderia </li>
-        <li> Carnes </li>
+
+      <div id="menu-hambur" className={`categorias ${clicked ? 'active' : '' }`}>
+          <ul><Link to="/nuevaLista">Lista de compras</Link></ul>
+          <ul><Link to="/estadisticas">Estadisticas</Link></ul>
+          <ul>Historial</ul>
+          <hr></hr>
+          <li> Mercado </li>
+          <li> Lacteos </li>
+          <li> Despensa </li>
+          <li> Frutas y verduras </li>
+          <li> Licores </li>
+          <li> Bebidas </li>
+          <li> Panaderia </li>
+          <li> Carnes </li>
       </div>
-      <div className={`bgMenu ${clicked ? 'active' : ''}`}></div>
+      <div className={`bgMenu ${clicked ? 'active' : '' }`} onClick={handleClick}></div>
+
 
       {/* SEARCH */}
       <div className="navbar-search">

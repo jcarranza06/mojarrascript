@@ -22,32 +22,32 @@ const Estadisticas = () => {
                     <LinesChart />
                 </div>
             </div>
-            <div>
                 <p className="m-2"><b>Productos más comprados</b><span class="yellow-star">&#11088;</span></p>
-                <div className="chart" style={{width:"100%", height:"225px"}}>
-                    <div style={{width:"100%", height:"100%", padding:"10px 0"}}>
+                <div className="bars-chart">
+                    <div className='bar-1' >
                         <div class="box">USUARIO</div>
                         <BarsChart />                       
                     </div>
-                    <div style={{width:"100%", height:"100%", padding:"10px 0"}}>
+                    <div  className='bar-2'>
                         <div class="box">GLOBAL</div>
                         <BarsChartG />                       
                     </div>
                 </div>
-            </div>
-            <div>
+            
                 <p className="m-2"><b>Almacenes Favoritos</b><span class="yellow-star">&#11088;</span></p>
-                <div className="chart" style={{width:"700px", height:"250px"}}>
-                    <div style={{width:"100%", height:"100%", padding:"10px 0"}}>
+                <div className="pies-chart" >
+                    <div className='pies-1' >
                         <div class="box">USUARIO</div>
                         <PiesChart />                       
                     </div>
-                    <div style={{width:"100%", height:"100%", padding:"10px 0"}}>
+                    <div className='pies-2'>
                         <div class="box">GLOBAL</div>
                         <PiesChartG />                       
                     </div>
                 </div>
-            </div>
+           
+        
+            
         </div>
     );
 };

@@ -12,7 +12,7 @@ function CardProductoBusqueda(props) {
                 </div>
                 <div className='productoInfo'>
                     <h1> {props.producto.name}</h1>
-                    <p> 32" </p>
+                    
                 </div>
                 <div className='cadenaIMG'>
                     <span>{props.producto.NOMBRESUPERMERCADO}</span>
