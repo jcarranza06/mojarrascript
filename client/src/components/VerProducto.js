@@ -4,7 +4,7 @@ import "../stylesheets/VerProducto.css";
 
 import Comentarios from './Comentarios';
 import BtnOpcionProducto from './BtnOpcionProducto';
-
+import { useAuth0 } from "@auth0/auth0-react";
 
 //ruta a carpeta de imagenes e iconos 
 //const iconosFolder = require.context("../Iconos", true)
@@ -43,9 +43,11 @@ const buttons = [
 
 
 function VerProducto() {
+    const { isAuthenticated,user } =  useAuth0()
     const params = new URLSearchParams(window.location.search);
     const id = params.get('idProducto'); // "123"
-    console.log(id);
+    const [userId, setUserId]= useState(0)
+    if(isAuthenticated){console.log(user)}
 
     const [producto, setProducto] = useState([{"id":0,"nombre":"","precio":"","descuento":null,"descripcion":null,"img":""}]);
     const [comentariosProducto, setComentariosProducto] = useState([]);
@@ -57,7 +59,6 @@ function VerProducto() {
 
         // Petición HTTP, consulta api y devuelve el body 
         let rui = "http://localhost:5000/getProductoById?idProducto="+id;
-        console.log(rui)
         let url = new URL(rui);
         fetch(url, options) // se hace la consulta 
             .then(response => response.text()) // se obtiene el cuerpo de la respuesta
@@ -67,6 +68,7 @@ function VerProducto() {
                 setProducto(json[0]); // funcion del useState
             });
     }
+    
 
     function getComentariosProducto() {
         // configuracion para la petición
@@ -81,13 +83,29 @@ function VerProducto() {
             .then(response => response.text()) // se obtiene el cuerpo de la respuesta
             .then(data => {
                 const json = JSON.parse(data);// se pasa la respuesta de string json a objeto de javascript
-                console.log(json);
                 setComentariosProducto(json); // funcion del useState
+            });
+    }
+    function getUserId(user) {
+        // configuracion para la petición
+        const options = {
+            method: "GET"
+        };
+
+        // Petición HTTP, consulta api y devuelve el body 
+        let rui = "http://localhost:5000/getUser?idAuth="+user.sub+"&name="+user.name+"&email="+user.email;
+        let url = new URL(rui);
+        fetch(url, options) // se hace la consulta 
+            .then(response => response.text()) // se obtiene el cuerpo de la respuesta
+            .then(data => {
+                const json = JSON.parse(data);// se pasa la respuesta de string json a objeto de javascript
+                setUserId(json[0].id); // funcion del useState
             });
     }
 
     // se usa useEffect((),[]) sin parametros para solo hacer una vez la consulta a la BD, no se debe hacer cada vez que se renderice
     useEffect(() => {
+        if(isAuthenticated){getUserId(user)};
         getProducto();
         getComentariosProducto();
     }, []);
@@ -131,7 +149,7 @@ function VerProducto() {
                         </div>
                     </div>
                 </div>
-                <Comentarios comments={comentariosProducto}></Comentarios>
+                <Comentarios productId={id} comments={comentariosProducto}></Comentarios>
             </div>
         </div>
     );
