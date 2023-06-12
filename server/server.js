@@ -55,7 +55,7 @@ app.get('/', (req, res) => {
 
     con.connect(function (err) {// se abre la coneccion con la BD
       if (err) throw err; // validacion de apertura
-      con.query("INSERT INTO usuario (NOMBREUSUARIO,EMAILUSUARIO,FECHAREGISTRO,ULTIMACONEXION,IDAUTH0) VALUES (?,?,NOW(),NOW(),?) ON duplicate KEY UPDATE ULTIMACONEXION=current_timestamp();", [userName, userEmail, userId], function (err, result, fields) { // se envía la petición a DB
+      con.query("INSERT INTO USUARIO (NOMBREUSUARIO,EMAILUSUARIO,FECHAREGISTRO,ULTIMACONEXION,IDAUTH0) VALUES (?,?,NOW(),NOW(),?) ON duplicate KEY UPDATE ULTIMACONEXION=current_timestamp();", [userName, userEmail, userId], function (err, result, fields) { // se envía la petición a DB
         if (err) throw err; // valida peticion enviada corrrectamente
       });
     });
@@ -83,7 +83,7 @@ app.get('/', (req, res) => {
     var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
     con.connect(function (err) {// se abre la coneccion con la BD
       if (err) throw err; // validacion de apertura
-      con.query("SELECT IDUSUARIO FROM tabla.usuario WHERE IDAUTH0=?;", [userId], function (err, result, fields) { // se envía la petición a DB
+      con.query("SELECT IDUSUARIO FROM tabla.USUARIO WHERE IDAUTH0=?;", [userId], function (err, result, fields) { // se envía la petición a DB
         if (err) throw err; // valida peticion enviada corrrectamente
         res.send(JSON.stringify({userId: result[0].IDUSUARIO, userName: userName})); // se imprime en pantalla el resultado de la consulta
       });
@@ -217,7 +217,7 @@ app.get('/getProductosMasVendidos', (req, res) => {
 
   con.connect(function (err) {// se abre la coneccion con la BD
     if (err) throw err; // validacion de apertura
-    con.query("SELECT IDPRODUCTO as id, NOMBREPRODUCTO as nombre,supermercado.NOMBRESUPERMERCADO as supermercado, PRECIOPRODUCTO as precio, DESCRIPCIONPRODUCTO as descricion, IMAGENPRODUCTO as imagen FROM `producto` JOIN supermercado WHERE supermercado.IDSUPERMERCADO = producto.IDSUPERMERCADO order by CANTIDADVENDIDA desc limit 5;", function (err, result, fields) { // se envía la petición a DB
+    con.query("SELECT IDPRODUCTO as id, NOMBREPRODUCTO as nombre,SUPERMERCADO.NOMBRESUPERMERCADO as supermercado, PRECIOPRODUCTO as precio, DESCRIPCIONPRODUCTO as descricion, IMAGENPRODUCTO as imagen FROM `PRODUCTO` JOIN SUPERMERCADO WHERE SUPERMERCADO.IDSUPERMERCADO = PRODUCTO.IDSUPERMERCADO order by CANTIDADVENDIDA desc limit 5;", function (err, result, fields) { // se envía la petición a DB
       if (err) throw err; // valida peticion enviada corrrectamente
       res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
     });
@@ -231,7 +231,7 @@ app.get('/getProductoById', (req, res) => {
   let id = req.query.idProducto;
   con.connect(function (err) {// se abre la coneccion con la BD
     if (err) throw err; // validacion de apertura
-    con.query("SELECT P.IDPRODUCTO AS id, P.NOMBREPRODUCTO AS nombre, P.PRECIOPRODUCTO AS precio, (P.PRECIOPRODUCTO*(1- CP.VALORCARACTERISTICA)) AS descuento,P.DESCRIPCIONPRODUCTO AS descripcion ,P.IMAGENPRODUCTO AS img  FROM producto P LEFT JOIN (SELECT * FROM CPERTENECEP WHERE IDCARACTERISTICA = 1) CP ON P.IDPRODUCTO = CP.IDPRODUCTO WHERE P.IDPRODUCTO=? LIMIT 1;", [id], function (err, result, fields) { // se envía la petición a DB
+    con.query("SELECT P.IDPRODUCTO AS id, P.NOMBREPRODUCTO AS nombre, P.PRECIOPRODUCTO AS precio, (P.PRECIOPRODUCTO*(1- CP.VALORCARACTERISTICA)) AS descuento,P.DESCRIPCIONPRODUCTO AS descripcion ,P.IMAGENPRODUCTO AS img  FROM PRODUCTO P LEFT JOIN (SELECT * FROM CPERTENECEP WHERE IDCARACTERISTICA = 1) CP ON P.IDPRODUCTO = CP.IDPRODUCTO WHERE P.IDPRODUCTO=? LIMIT 1;", [id], function (err, result, fields) { // se envía la petición a DB
       if (err) throw err; // valida peticion enviada corrrectamente
       res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
     });
@@ -302,8 +302,9 @@ app.post('/crearLista', (req, res) => {
   var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
 
   const userId = req.body.userId;
-  const sql = `INSERT INTO CARRITO (IDUSUARIO, FECHACREACION) VALUES (?, NOW())`;
-  const values = [userId];
+  const nombreCarrito = req.body.nombreCarrito;
+  const sql = `INSERT INTO CARRITO (IDUSUARIO, NOMBRECARRITO, FECHACREACION) VALUES (?, ?, NOW())`;
+  const values = [userId, nombreCarrito];
   con.connect(function (err) {
     if (err) throw err;
     con.query(sql, values, (err, result) => {
@@ -342,7 +343,30 @@ app.post('/crearLista', (req, res) => {
 // });
 // });
 
-
+app.get('/getUserListas', (req, res) => {
+  var conn = require('./DBConection.js'); 
+  var con = conn.con(); 
+  let idUsuario = Number(req.query.idUsuario);
+  con.connect(function (err) {
+    if (err) throw err; 
+    con.query("SELECT IDCARRITO, NOMBRECARRITO  FROM CARRITO where IDUSUARIO=?;", [idUsuario], function (err, result, fields) { // se envía la petición a DB
+      if (err) throw err;
+      res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
+    });
+  });
+});
+app.get('/getProductosLista', (req, res) => {
+  var conn = require('./DBConection.js'); 
+  var con = conn.con(); 
+  let idCarrito = req.query.carritoId;
+  con.connect(function (err) {
+    if (err) throw err; // validacion de apertura
+    con.query("SELECT P.NOMBREPRODUCTO, P.IDPRODUCTO, P.IDSUPERMERCADO, P.PRECIOPRODUCTO, S.LOGOSUPERMERCADO FROM CLLEVAP AS L JOIN PRODUCTO AS P ON L.IDPRODUCTO = P.IDPRODUCTO JOIN SUPERMERCADO AS S ON P.IDSUPERMERCADO = S.IDSUPERMERCADO WHERE L.IDCARRITO = ?;", [idCarrito], function (err, result, fields) { // se envía la petición a DB
+      if (err) throw err; // valida peticion enviada corrrectamente
+      res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
+    });
+  });
+});
 
 // Ruta para eliminar un carrito y mover productos al historial
 
@@ -453,7 +477,7 @@ app.get('/addToHistory', (req, res) => {
   let idUsuario = req.query.idUsuario;
   con.connect(function (err) {// se abre la coneccion con la BD
     if (err) throw err; // validacion de apertura
-    con.query("INSERT INTO historial (IDBUSQUEDA, IDUSUARIO, IDPRODUCTO, FECHABUSQUEDA, TERMINOBUSQUEDA) VALUES (null, ?, ?, NOW(),'sumadre');", [idUsuario, idProducto], function (err, result, fields) { // se envía la petición a DB
+    con.query("INSERT INTO HISTORIAL (IDBUSQUEDA, IDUSUARIO, IDPRODUCTO, FECHABUSQUEDA, TERMINOBUSQUEDA) VALUES (null, ?, ?, NOW(),'sumadre');", [idUsuario, idProducto], function (err, result, fields) { // se envía la petición a DB
       if (err) throw err; // valida peticion enviada corrrectamente
       res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
     });
@@ -469,12 +493,13 @@ app.get('/getUserHistory', (req, res) => {
   let idUsuario = req.query.idUsuario;
   con.connect(function (err) {// se abre la coneccion con la BD
     if (err) throw err; // validacion de apertura
-    con.query("SELECT IDBUSQUEDA, IDUSUARIO, IDPRODUCTO, FECHABUSQUEDA FROM tabla.historial where IDUSUARIO=?;", [idUsuario], function (err, result, fields) { // se envía la petición a DB
+    con.query("SELECT IDBUSQUEDA, IDUSUARIO, IDPRODUCTO, FECHABUSQUEDA FROM tabla.HISTORIAL where IDUSUARIO=?;", [idUsuario], function (err, result, fields) { // se envía la petición a DB
       if (err) throw err; // valida peticion enviada corrrectamente
       res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
     });
   });
 });
+
 
 //deleteFromUserHistory: obtiene todos los productos del historial de un cliente, es necesario pasarle idUsuario: int  
 //ejemplo de llamada:  http://localhost:5000/deleteFromUserHistory?idBusqueda=2
@@ -485,7 +510,7 @@ app.get('/deleteFromUserHistory', (req, res) => {
   let idBusqueda = req.query.idBusqueda;
   con.connect(function (err) {// se abre la coneccion con la BD
     if (err) throw err; // validacion de apertura
-    con.query("DELETE FROM historial WHERE IDBUSQUEDA=?;", [idBusqueda], function (err, result, fields) { // se envía la petición a DB
+    con.query("DELETE FROM HISTORIAL WHERE IDBUSQUEDA=?;", [idBusqueda], function (err, result, fields) { // se envía la petición a DB
       if (err) throw err; // valida peticion enviada corrrectamente
       res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
     });
@@ -551,18 +576,18 @@ app.post('/uploadProducts', (req, res) => {
       products.forEach(element => {
         console.log(element)
         urlImage = decodeURIComponent(element['image'])
-        con.query("SELECT IDPRODUCTO FROM tabla.producto WHERE NOMBREPRODUCTO = ? AND IMAGENPRODUCTO = ? AND IDSUPERMERCADO = ?;", [element['name'], urlImage, marketCodes[element['market']]], function (err, result, fields) { // se envía la petición a DB
+        con.query("SELECT IDPRODUCTO FROM tabla.PRODUCTO WHERE NOMBREPRODUCTO = ? AND IMAGENPRODUCTO = ? AND IDSUPERMERCADO = ?;", [element['name'], urlImage, marketCodes[element['market']]], function (err, result, fields) { // se envía la petición a DB
           if (err) throw err; // valida peticion enviada corrrectamente
           console.log('res: ', result)
           // en caso de que el producto no este en la BD, se va a subir
           if (result.length < 1) {
-            con.query("INSERT INTO `tabla`.`producto` (`IDSUPERMERCADO`, `NOMBREPRODUCTO`, `IMAGENPRODUCTO`, `PRECIOPRODUCTO`) VALUES (?, ?, ?, ?);", [marketCodes[element['market']], element['name'], urlImage, element['price']], function (err, result, fields) {
+            con.query("INSERT INTO `tabla`.`PRODUCTO` (`IDSUPERMERCADO`, `NOMBREPRODUCTO`, `IMAGENPRODUCTO`, `PRECIOPRODUCTO`) VALUES (?, ?, ?, ?);", [marketCodes[element['market']], element['name'], urlImage, element['price']], function (err, result, fields) {
               //console.log(result)
               validateEnd()
             })
           } else { //en caso que el producto ya este en la bd se va a actualizar el precio de la primera aparicion de este en la BD
             console.log("updateing: ", result[0].IDPRODUCTO)
-            con.query("UPDATE `tabla`.`producto` SET `PRECIOPRODUCTO` = ? WHERE (`IDPRODUCTO` = ?);", [element['price'], result[0].IDPRODUCTO], function (err, result, fields) {
+            con.query("UPDATE `tabla`.`PRODUCTO` SET `PRECIOPRODUCTO` = ? WHERE (`IDPRODUCTO` = ?);", [element['price'], result[0].IDPRODUCTO], function (err, result, fields) {
               //console.log(result)
               validateEnd()
             })
