@@ -408,9 +408,8 @@ app.get('/getAhorro/:productoId', (req, res) => {
     } else {
       const producto = resultProducto[0];
 
-      // Consulta para obtener el producto más caro con el mismo nombre
+      // Consulta para obtener el producto más caro con el nombre parecido
       const sqlSelectMaxPrecio = `SELECT MAX(PRECIOPRODUCTO) AS MAXPRECIO FROM PRODUCTO WHERE NOMBREPRODUCTO LIKE = ?`;
-      //const selectMaxPrecioValues = [producto.NOMBREPRODUCTO];
       const selectMaxPrecioValues = [`%${producto.NOMBREPRODUCTO}%`];
       con.query(sqlSelectMaxPrecio, selectMaxPrecioValues, (err, resultMaxPrecio) => {
         if (err) {
