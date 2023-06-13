@@ -11,8 +11,7 @@ function CardProducto(props) {
                 <img src={props.producto.imagen} alt=""></img>
                 {props.producto.nombre}
 
-                <span>{props.producto.supermercado}</span>
-
+                <img src={props.producto.imagenSupermercado} style={{ maxHeight:'40px'}}></img>
                 <button>
                     $ {props.producto.precio}
                 </button>

@@ -46,12 +46,12 @@ function Comentarios(props) {
                 const json = JSON.parse(data);// se pasa la respuesta de string json a objeto de javascript
                 console.log(json.id);
                 setUserId(json.id); // funcion del useState
-                console.log('puesto '+userId)
-                sendRequestAddComment();
+                console.log('puesto '+ userId)
+                sendRequestAddComment(json.id);
             });
     }
 
-    function sendRequestAddComment(){
+    function sendRequestAddComment(userId){
         const options = {
             method: "GET"
         };
@@ -65,6 +65,7 @@ function Comentarios(props) {
             .then(data => {
                 const json = JSON.parse(data);// se pasa la respuesta de string json a objeto de javascript
                 console.log(json);
+                alert(json)
             });
     }
 
@@ -73,7 +74,6 @@ function Comentarios(props) {
         if(isAuthenticated){getUserId(user)}
         else(loginWithRedirect());
 
-        
     }
 
     return (

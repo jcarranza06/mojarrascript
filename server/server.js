@@ -137,7 +137,10 @@ app.get('/getUser', (req, res) => {
     if (result.length < 1) {
       //console.log('agre')
       con.query("INSERT INTO USUARIO (NOMBREUSUARIO,EMAILUSUARIO,FECHAREGISTRO,ULTIMACONEXION,IDAUTH0) VALUES (?,?,NOW(),NOW(),?)", [name, email, idAuth], function (err, result1, fields) {
-        res.send(JSON.stringify({ id: result1.insertId, response: result1 })); // se imprime en pantalla el resultado de la consulta
+        con.query("INSERT INTO CARRITO (IDUSUARIO, NOMBRECARRITO, FECHACREACION) VALUES (?, 'Favoritos', NOW())", [result1.insertId], function (err, result2, fields) {
+          res.send(JSON.stringify({ id: result1.insertId, response: result1 })); // se imprime en pantalla el resultado de la consulta
+        })
+        //res.send(JSON.stringify({ id: result1.insertId, response: result1 })); // se imprime en pantalla el resultado de la consulta
       })
     } else { //en caso que el producto ya este en la bd se va a actualizar el precio de la primera aparicion de este en la BD
       //console.log("updateing: ", result[0].IDUSUARIO)
@@ -152,8 +155,8 @@ app.get('/getUser', (req, res) => {
 app.get('/comentarios', (req, res) => {
   var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
   var con = conn.con();
-  const userId = req.query.userId, productId= req.query.productId, comentario = req.query.comentario ;
-  console.log(userId,productId,comentario)
+  const userId = req.query.userId, productId = req.query.productId, comentario = req.query.comentario;
+  console.log(userId, productId, comentario)
   const sql = `INSERT INTO COMENTARIO (IDUSUARIO, IDPRODUCTO, COMENTARIO) VALUES (?, ?, ?)`;
   const values = [userId, productId, comentario];
   con.connect(function (err) {
@@ -201,7 +204,7 @@ app.get('/getProductosEnOferta', (req, res) => {
 
   con.connect(function (err) {// se abre la coneccion con la BD
     if (err) throw err; // validacion de apertura
-    con.query("SELECT P.NOMBREPRODUCTO as 'nombre', P.IDPRODUCTO as 'id', P.IMAGENPRODUCTO as 'imagen', M.NOMBRESUPERMERCADO as 'supermercado', (P.PRECIOPRODUCTO * (1-CP.VALORCARACTERISTICA)) as 'precio' FROM PRODUCTO P JOIN CPERTENECEP CP ON P.IDPRODUCTO = CP.IDPRODUCTO JOIN SUPERMERCADO M ON P.IDSUPERMERCADO = M.IDSUPERMERCADO JOIN CARACTERISTICASPRODUCTO C ON CP.IDCARACTERISTICA = C.IDCARACTERISTICA WHERE C.NOMBRECARACTERISTICA = 'Oferta' ;", function (err, result, fields) { // se envía la petición a DB
+    con.query("SELECT P.NOMBREPRODUCTO as 'nombre', P.IDPRODUCTO as 'id', P.IMAGENPRODUCTO as 'imagen', M.NOMBRESUPERMERCADO as 'supermercado', (P.PRECIOPRODUCTO * (1-CP.VALORCARACTERISTICA)) as 'precio', M.LOGOSUPERMERCADO AS imagenSupermercado FROM PRODUCTO P JOIN CPERTENECEP CP ON P.IDPRODUCTO = CP.IDPRODUCTO JOIN SUPERMERCADO M ON P.IDSUPERMERCADO = M.IDSUPERMERCADO JOIN CARACTERISTICASPRODUCTO C ON CP.IDCARACTERISTICA = C.IDCARACTERISTICA WHERE C.NOMBRECARACTERISTICA = 'Oferta' ;", function (err, result, fields) { // se envía la petición a DB
 
       if (err) throw err; // valida peticion enviada corrrectamente
       res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
@@ -217,7 +220,7 @@ app.get('/getProductosMasVendidos', (req, res) => {
 
   con.connect(function (err) {// se abre la coneccion con la BD
     if (err) throw err; // validacion de apertura
-    con.query("SELECT IDPRODUCTO as id, NOMBREPRODUCTO as nombre,SUPERMERCADO.NOMBRESUPERMERCADO as supermercado, PRECIOPRODUCTO as precio, DESCRIPCIONPRODUCTO as descricion, IMAGENPRODUCTO as imagen FROM `PRODUCTO` JOIN SUPERMERCADO WHERE SUPERMERCADO.IDSUPERMERCADO = PRODUCTO.IDSUPERMERCADO order by CANTIDADVENDIDA desc limit 5;", function (err, result, fields) { // se envía la petición a DB
+    con.query("SELECT IDPRODUCTO as id, NOMBREPRODUCTO as nombre,SUPERMERCADO.NOMBRESUPERMERCADO as supermercado, PRECIOPRODUCTO as precio, DESCRIPCIONPRODUCTO as descricion, IMAGENPRODUCTO as imagen, LOGOSUPERMERCADO AS imagenSupermercado FROM `PRODUCTO` JOIN SUPERMERCADO WHERE SUPERMERCADO.IDSUPERMERCADO = PRODUCTO.IDSUPERMERCADO order by CANTIDADVENDIDA desc limit 5;", function (err, result, fields) { // se envía la petición a DB
       if (err) throw err; // valida peticion enviada corrrectamente
       res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
     });
@@ -247,7 +250,7 @@ app.get('/searchProduct', (req, res) => {
   if (!filtrar) {
     con.connect(function (err) {// se abre la coneccion con la BD
       if (err) throw err; // validacion de apertura
-      con.query("SELECT P.NOMBREPRODUCTO as 'name', P.IDPRODUCTO, P.IMAGENPRODUCTO as 'img', M.NOMBRESUPERMERCADO, P.PRECIOPRODUCTO as 'precio' FROM PRODUCTO P JOIN SUPERMERCADO M ON P.IDSUPERMERCADO = M.IDSUPERMERCADO WHERE LOWER(P.NOMBREPRODUCTO)  LIKE ?;", [search], function (err, result, fields) { // se envía la petición a DB
+      con.query("SELECT P.NOMBREPRODUCTO as 'name', P.IDPRODUCTO, P.IMAGENPRODUCTO as 'img', M.NOMBRESUPERMERCADO, P.PRECIOPRODUCTO as 'precio', M.LOGOSUPERMERCADO AS imagenSupermercado FROM PRODUCTO P JOIN SUPERMERCADO M ON P.IDSUPERMERCADO = M.IDSUPERMERCADO WHERE LOWER(P.NOMBREPRODUCTO)  LIKE ?;", [search], function (err, result, fields) { // se envía la petición a DB
         if (err) throw err; // valida peticion enviada corrrectamente
         res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
       });
@@ -257,10 +260,10 @@ app.get('/searchProduct', (req, res) => {
     let order = Number(req.query.order);
     let querySql;
     if (order == 0) {
-      querySql = "SELECT P.NOMBREPRODUCTO as 'name', P.IDPRODUCTO, P.IMAGENPRODUCTO as 'img', M.NOMBRESUPERMERCADO, P.PRECIOPRODUCTO as 'precio' FROM PRODUCTO P JOIN SUPERMERCADO M ON P.IDSUPERMERCADO = M.IDSUPERMERCADO WHERE (LOWER(P.NOMBREPRODUCTO)  LIKE ? AND P.PRECIOPRODUCTO>=? AND P.PRECIOPRODUCTO <=?);";
+      querySql = "SELECT P.NOMBREPRODUCTO as 'name', P.IDPRODUCTO, P.IMAGENPRODUCTO as 'img', M.NOMBRESUPERMERCADO, P.PRECIOPRODUCTO as 'precio', M.LOGOSUPERMERCADO AS imagenSupermercado FROM PRODUCTO P JOIN SUPERMERCADO M ON P.IDSUPERMERCADO = M.IDSUPERMERCADO WHERE (LOWER(P.NOMBREPRODUCTO)  LIKE ? AND P.PRECIOPRODUCTO>=? AND P.PRECIOPRODUCTO <=?);";
     } else {
       let o = order == 1 ? 'DESC' : 'ASC';
-      querySql = "SELECT P.NOMBREPRODUCTO as 'name', P.IDPRODUCTO, P.IMAGENPRODUCTO as 'img', M.NOMBRESUPERMERCADO, P.PRECIOPRODUCTO as 'precio' FROM PRODUCTO P JOIN SUPERMERCADO M ON P.IDSUPERMERCADO = M.IDSUPERMERCADO WHERE (LOWER(P.NOMBREPRODUCTO)  LIKE ? AND P.PRECIOPRODUCTO>=? AND P.PRECIOPRODUCTO <=?) ORDER BY P.PRECIOPRODUCTO " + o + ";";
+      querySql = "SELECT P.NOMBREPRODUCTO as 'name', P.IDPRODUCTO, P.IMAGENPRODUCTO as 'img', M.NOMBRESUPERMERCADO, P.PRECIOPRODUCTO as 'precio', M.LOGOSUPERMERCADO AS imagenSupermercado FROM PRODUCTO P JOIN SUPERMERCADO M ON P.IDSUPERMERCADO = M.IDSUPERMERCADO WHERE (LOWER(P.NOMBREPRODUCTO)  LIKE ? AND P.PRECIOPRODUCTO>=? AND P.PRECIOPRODUCTO <=?) ORDER BY P.PRECIOPRODUCTO " + o + ";";
     }
 
     con.connect(function (err) {// se abre la coneccion con la BD
@@ -312,8 +315,8 @@ app.post('/crearLista', (req, res) => {
         console.error('Error al crear la lista:', err);
         res.status(500).send('Error al crear la lista');
       } else {
-        console.log('Lista creada correctamente');
-        res.status(200).send('Lista creada correctamente');
+        //console.log('Lista creada correctamente');
+        res.status(200).send(JSON.stringify(result));
       }
     });
   });
@@ -344,11 +347,11 @@ app.post('/crearLista', (req, res) => {
 // });
 
 app.get('/getUserListas', (req, res) => {
-  var conn = require('./DBConection.js'); 
-  var con = conn.con(); 
+  var conn = require('./DBConection.js');
+  var con = conn.con();
   let idUsuario = Number(req.query.idUsuario);
   con.connect(function (err) {
-    if (err) throw err; 
+    if (err) throw err;
     con.query("SELECT IDCARRITO, NOMBRECARRITO  FROM CARRITO where IDUSUARIO=?;", [idUsuario], function (err, result, fields) { // se envía la petición a DB
       if (err) throw err;
       res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
@@ -356,8 +359,8 @@ app.get('/getUserListas', (req, res) => {
   });
 });
 app.get('/getProductosLista', (req, res) => {
-  var conn = require('./DBConection.js'); 
-  var con = conn.con(); 
+  var conn = require('./DBConection.js');
+  var con = conn.con();
   let idCarrito = req.query.carritoId;
   con.connect(function (err) {
     if (err) throw err; // validacion de apertura
@@ -424,6 +427,8 @@ app.post('/insertarProducto', (req, res) => {
 
   const sql = `INSERT INTO CLLEVAP (IDCARRITO, IDPRODUCTO) VALUES (?, ?)`;
   const values = [carritoId, productoId];
+  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+  var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
   con.connect(function (err) {
     if (err) throw err;
     con.query(sql, values, (err, result) => {
@@ -477,7 +482,7 @@ app.get('/addToHistory', (req, res) => {
   let idUsuario = req.query.idUsuario;
   con.connect(function (err) {// se abre la coneccion con la BD
     if (err) throw err; // validacion de apertura
-    con.query("INSERT INTO HISTORIAL (IDBUSQUEDA, IDUSUARIO, IDPRODUCTO, FECHABUSQUEDA, TERMINOBUSQUEDA) VALUES (null, ?, ?, NOW(),'sumadre');", [idUsuario, idProducto], function (err, result, fields) { // se envía la petición a DB
+    con.query("INSERT INTO HISTORIAL (IDBUSQUEDA, IDUSUARIO, IDPRODUCTO, FECHABUSQUEDA) VALUES (null, ?, ?, NOW());", [idUsuario, idProducto], function (err, result, fields) { // se envía la petición a DB
       if (err) throw err; // valida peticion enviada corrrectamente
       res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
     });
