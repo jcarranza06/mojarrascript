@@ -26,7 +26,7 @@ function Comentarios(props) {
         setComments(props.comments)
     }, [props.comments]);
 
-    console.log('com ',comments, props.comments)
+    //console.log('com ',comments, props.comments)
     const handleChange = event => {
         setComentarioEscrito(event.target.value)
     }
@@ -39,15 +39,15 @@ function Comentarios(props) {
 
         // Petición HTTP, consulta api y devuelve el body 
         let rui = "http://localhost:5000/getUser?idAuth="+user.sub+"&name="+user.name+"&email="+user.email+"&foto="+encodeURIComponent(user.picture);
-        console.log(rui)
+        //console.log(rui)
         let url = new URL(rui);
         fetch(url, options) // se hace la consulta 
             .then(response => response.text()) // se obtiene el cuerpo de la respuesta
             .then(data => {
                 const json = JSON.parse(data);// se pasa la respuesta de string json a objeto de javascript
-                console.log(json.id);
+                //console.log(json.id);
                 setUserId(json.id); // funcion del useState
-                console.log('puesto '+ userId)
+                //console.log('puesto '+ userId)
                 sendRequestAddComment(json.id);
             });
     }
@@ -59,13 +59,13 @@ function Comentarios(props) {
 
         // Petición HTTP, consulta api y devuelve el body 
         let rui = "http://localhost:5000/comentarios?userId="+userId+"&productId="+props.productId+"&comentario="+comentarioEscrito;
-        console.log(rui)
+        //console.log(rui)
         let url = new URL(rui);
         fetch(url, options) // se hace la consulta 
             .then(response => response.text()) // se obtiene el cuerpo de la respuesta
             .then(data => {
                 const json = JSON.parse(data);// se pasa la respuesta de string json a objeto de javascript
-                console.log('comentarios',json);
+                //console.log('comentarios',json);
                 //alert(json)
                 setComments([...comments, {COMENTARIO:comentarioEscrito, FECHACOMENTARIO:null,FOTOUSUARIO:user.picture, NOMBREUSUARIO:user.name}])
                 setComentarioEscrito('');
@@ -73,7 +73,7 @@ function Comentarios(props) {
     }
 
     function sendComentario(){
-        console.log(comentarioEscrito)
+        //console.log(comentarioEscrito)
         if(isAuthenticated){getUserId(user)}
         else(loginWithRedirect());
 

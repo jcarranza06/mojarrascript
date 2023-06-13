@@ -235,7 +235,7 @@ app.get('/getProductoById', (req, res) => {
   let id = req.query.idProducto;
   con.connect(function (err) {// se abre la coneccion con la BD
     if (err) throw err; // validacion de apertura
-    con.query("SELECT P.IDPRODUCTO AS id, P.NOMBREPRODUCTO AS nombre, P.PRECIOPRODUCTO AS precio, (P.PRECIOPRODUCTO*(1- CP.VALORCARACTERISTICA)) AS descuento,P.DESCRIPCIONPRODUCTO AS descripcion ,P.IMAGENPRODUCTO AS img  FROM PRODUCTO P LEFT JOIN (SELECT * FROM CPERTENECEP WHERE IDCARACTERISTICA = 1) CP ON P.IDPRODUCTO = CP.IDPRODUCTO WHERE P.IDPRODUCTO=? LIMIT 1;", [id], function (err, result, fields) { // se envía la petición a DB
+    con.query("SELECT P.IDPRODUCTO AS id, P.NOMBREPRODUCTO AS nombre, P.PRECIOPRODUCTO AS precio, (P.PRECIOPRODUCTO*(1- CP.VALORCARACTERISTICA)) AS descuento,P.DESCRIPCIONPRODUCTO AS descripcion ,P.IMAGENPRODUCTO AS img, M.NOMBRESUPERMERCADO  FROM PRODUCTO P LEFT JOIN (SELECT * FROM CPERTENECEP WHERE IDCARACTERISTICA = 1) CP ON P.IDPRODUCTO = CP.IDPRODUCTO JOIN SUPERMERCADO M ON P.IDSUPERMERCADO = M.IDSUPERMERCADO WHERE P.IDPRODUCTO=? LIMIT 1;", [id], function (err, result, fields) { // se envía la petición a DB
       if (err) throw err; // valida peticion enviada corrrectamente
       res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
     });

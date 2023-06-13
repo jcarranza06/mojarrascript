@@ -57,6 +57,7 @@ function VerProducto() {
     }
     const [producto, setProducto] = useState([{ "id": 0, "nombre": "", "precio": "", "descuento": null, "descripcion": null, "img": "" }]);
     const [comentariosProducto, setComentariosProducto] = useState([]);
+    const [cargaProducto, setCargaProducto] = useState(false);
     function getProducto() {
         // configuracion para la petición
         const options = {
@@ -70,8 +71,9 @@ function VerProducto() {
             .then(response => response.text()) // se obtiene el cuerpo de la respuesta
             .then(data => {
                 const json = JSON.parse(data);// se pasa la respuesta de string json a objeto de javascript
-                console.log(json);
+                console.log('prod', json);
                 setProducto(json[0]); // funcion del useState
+                setCargaProducto(true);
             });
     }
 
@@ -116,7 +118,7 @@ function VerProducto() {
         };
 
         // Petición HTTP, consulta api y devuelve el body 
-        let rui = "http://localhost:5000/getUser?idAuth=" + user.sub + "&name=" + user.name + "&email=" + user.email + "&foto="+encodeURIComponent(user.picture);
+        let rui = "http://localhost:5000/getUser?idAuth=" + user.sub + "&name=" + user.name + "&email=" + user.email + "&foto=" + encodeURIComponent(user.picture);
         let url = new URL(rui);
         //console.log('enviadaPeticion', user, url)
         fetch(url, options) // se hace la consulta 
@@ -126,6 +128,7 @@ function VerProducto() {
                 //console.log("idUsuaro" , json.id)
                 setUserId(json.id); // funcion del useState
                 setIsDialog(true)
+
             });
     }
 
@@ -187,7 +190,7 @@ function VerProducto() {
 
                         </div>
                         <div className="mapsContainer">
-                            <MapContainer />
+                            {cargaProducto && <MapContainer supermercado={producto.NOMBRESUPERMERCADO}/>}
                         </div>
                         <div className="btnsOptionsVerProducto">
                             {

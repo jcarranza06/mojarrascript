@@ -9,7 +9,7 @@ import d1Icon from '../Iconos/d1.png';
 import exitoIcon from '../Iconos/exito.png';
 
 
-const MapComponent = () => {
+const MapComponent = (props) => {
   const [selectedLocation, setSelectedLocation] = useState(null);
 
   useEffect(() => {
@@ -25,6 +25,7 @@ const MapComponent = () => {
       // Una vez que la API se ha cargado correctamente se inicializa el mapa
       initMap();
     });
+
   }, []);
 
 
@@ -352,10 +353,10 @@ const MapComponent = () => {
       [4.700263292042001, -74.07534957003305, "D1 San Nicolas"],
       [4.702059672547231, -74.08084273398546, "D1 Pontevedra"]
     ];
-
+    
      // Función para manejar el cambio de ubicación seleccionada
-    const handleLocationChange = (event) => {
-      const selectedValue = event.target.value;
+    const handleLocationChange = (event, defau) => {
+      const selectedValue = defau ? props.supermercado :event.target.value;
       setSelectedLocation(selectedValue);
       
       // Hacer zoom a nivel 11 en cada cambio de ubicación seleccionada
@@ -457,7 +458,7 @@ const MapComponent = () => {
 
 
     };
-
+    
     // Agregar la lista desplegable al mapa utilizando el DOM
     const dropdownContainer = document.createElement('div');
     //dropdownContainer.style.backgroundColor = 'black';
@@ -482,6 +483,8 @@ const MapComponent = () => {
 
     dropdownContainer.appendChild(dropdown);
     map.controls[window.google.maps.ControlPosition.TOP_LEFT].push(dropdownContainer);
+    console.log(props.supermercado)
+    handleLocationChange(null, 1);
   };
 
   return (
