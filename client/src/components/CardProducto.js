@@ -1,8 +1,7 @@
 import React from 'react'
 import "../stylesheets/Home.css"; // import your navbar styles
 import {
-    Link,
-    useNavigate
+    Link
 } from "react-router-dom";
 
 function CardProducto(props) {
@@ -12,8 +11,7 @@ function CardProducto(props) {
                 <img src={props.producto.imagen} alt=""></img>
                 {props.producto.nombre}
 
-                <span>{props.producto.supermercado}</span>
-
+                <img src={props.producto.imagenSupermercado} style={{ maxHeight:'40px'}}></img>
                 <button>
                     $ {props.producto.precio}
                 </button>
