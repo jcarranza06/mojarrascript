@@ -130,13 +130,14 @@ app.get('/getUser', (req, res) => {
   let idAuth = req.query.idAuth;
   let name = req.query.name;
   let email = req.query.email;
+  let foto = decodeURIComponent(req.query.foto);
   con.query("SELECT IDUSUARIO FROM USUARIO WHERE IDAUTH0 = ?;", [idAuth], function (err, result, fields) { // se envía la petición a DB
     if (err) throw err; // valida peticion enviada corrrectamente
 
     // en caso de que el producto no este en la BD, se va a subir
     if (result.length < 1) {
       //console.log('agre')
-      con.query("INSERT INTO USUARIO (NOMBREUSUARIO,EMAILUSUARIO,FECHAREGISTRO,ULTIMACONEXION,IDAUTH0) VALUES (?,?,NOW(),NOW(),?)", [name, email, idAuth], function (err, result1, fields) {
+      con.query("INSERT INTO USUARIO (NOMBREUSUARIO,EMAILUSUARIO,FECHAREGISTRO,ULTIMACONEXION,IDAUTH0,FOTOUSUARIO) VALUES (?,?,NOW(),NOW(),?,?)", [name, email, idAuth, foto], function (err, result1, fields) {
         con.query("INSERT INTO CARRITO (IDUSUARIO, NOMBRECARRITO, FECHACREACION) VALUES (?, 'Favoritos', NOW())", [result1.insertId], function (err, result2, fields) {
           res.send(JSON.stringify({ id: result1.insertId, response: result1 })); // se imprime en pantalla el resultado de la consulta
         })
@@ -157,7 +158,7 @@ app.get('/comentarios', (req, res) => {
   var con = conn.con();
   const userId = req.query.userId, productId = req.query.productId, comentario = req.query.comentario;
   console.log(userId, productId, comentario)
-  const sql = `INSERT INTO COMENTARIO (IDUSUARIO, IDPRODUCTO, COMENTARIO) VALUES (?, ?, ?)`;
+  const sql = `INSERT INTO COMENTARIO (IDUSUARIO, IDPRODUCTO, COMENTARIO, FECHACOMENTARIO) VALUES (?, ?, ?, NOW())`;
   const values = [userId, productId, comentario];
   con.connect(function (err) {
     if (err) throw err;
@@ -281,7 +282,7 @@ app.get('/getComentarios/:productId', (req, res) => {
   var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
   var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
   const productId = req.params.productId;
-  const sql = `SELECT COMENTARIO, IDUSUARIO, FECHACOMENTARIO FROM comentario WHERE IDPRODUCTO = ?;`;
+  const sql = `SELECT COMENTARIO, USUARIO.NOMBREUSUARIO, USUARIO.FOTOUSUARIO,FECHACOMENTARIO FROM COMENTARIO LEFT JOIN USUARIO ON COMENTARIO.IDUSUARIO=USUARIO.IDUSUARIO WHERE IDPRODUCTO = ?;`;
   const values = [productId];
   con.connect(function (err) {
     if (err) throw err;

@@ -115,7 +115,7 @@ function VerProducto() {
         };
 
         // Petición HTTP, consulta api y devuelve el body 
-        let rui = "http://localhost:5000/getUser?idAuth=" + user.sub + "&name=" + user.name + "&email=" + user.email;
+        let rui = "http://localhost:5000/getUser?idAuth=" + user.sub + "&name=" + user.name + "&email=" + user.email + "&foto="+encodeURIComponent(user.picture);
         let url = new URL(rui);
         //console.log('enviadaPeticion', user, url)
         fetch(url, options) // se hace la consulta 
