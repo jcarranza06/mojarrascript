@@ -389,3 +389,47 @@ app.delete('/eliminarProducto/:carritoId/:productoId', (req, res) => {
   });
 });
 });
+
+// Ruta para obtener el ahorro de un producto
+app.get('/getAhorro/:productoId', (req, res) => {
+  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+  var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+  const productoId = req.params.productoId;
+
+  // Consulta para obtener el producto específico
+  const sqlSelectProducto = `SELECT PRECIOPRODUCTO, NOMBREPRODUCTO FROM PRODUCTO WHERE IDPRODUCTO = ?`;
+  const selectProductoValues = [productoId];
+  con.connect(function(err) {
+    if (err) throw err;
+  con.query(sqlSelectProducto, selectProductoValues, (err, resultProducto) => {
+    if (err) {
+      console.error('Error al obtener el producto:', err);
+      res.status(500).send('Error al obtener el producto');
+    } else {
+      const producto = resultProducto[0];
+
+      // Consulta para obtener el producto más caro con el mismo nombre
+      const sqlSelectMaxPrecio = `SELECT MAX(PRECIOPRODUCTO) AS MAXPRECIO FROM PRODUCTO WHERE NOMBREPRODUCTO LIKE = ?`;
+      //const selectMaxPrecioValues = [producto.NOMBREPRODUCTO];
+      const selectMaxPrecioValues = [`%${producto.NOMBREPRODUCTO}%`];
+      con.query(sqlSelectMaxPrecio, selectMaxPrecioValues, (err, resultMaxPrecio) => {
+        if (err) {
+          console.error('Error al obtener el producto más caro:', err);
+          res.status(500).send('Error al obtener el producto más caro');
+        } else {
+          const maxPrecio = resultMaxPrecio[0].MAXPRECIO;
+          const ahorro = maxPrecio - producto.PRECIOPRODUCTO;
+          const respuesta = {
+            productoId,
+            nombreProducto: producto.NOMBREPRODUCTO,
+            precioProducto: producto.PRECIOPRODUCTO,
+            ahorro,
+          };
+
+          res.status(200).json(respuesta);
+        }
+      });
+    }
+  });
+});
+});
