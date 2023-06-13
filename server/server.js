@@ -505,6 +505,59 @@ app.get('/getUserHistory', (req, res) => {
   });
 });
 
+app.get('/getNombreProductosMasVendidos', (req, res) => {// devuelve los 5 productos mas vendidos
+  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+  var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+  let idUsuario = req.query.idUsuario;
+  con.connect(function (err) {// se abre la coneccion con la BD
+    if (err) throw err; // validacion de apertura
+    con.query("SELECT `NOMBREPRODUCTO`,`CANTIDADVENDIDA` FROM `producto` ORDER BY CANTIDADVENDIDA DESC LIMIT 5;", function (err, result, fields) { // se envía la petición a DB
+      if (err) throw err; // valida peticion enviada corrrectamente
+      res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
+    });
+  });
+});
+
+app.get('/getSupermercadosFavoritos', (req, res) => {// devuelve los 5 supermercados que mas venden
+  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+  var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+  con.connect(function (err) {// se abre la coneccion con la BD
+    if (err) throw err; // validacion de apertura
+    con.query("SELECT sum(CANTIDADVENDIDA),supermercado.NOMBRESUPERMERCADO FROM producto JOIN supermercado ON producto.IDSUPERMERCADO = supermercado.IDSUPERMERCADO GROUP BY producto.IDSUPERMERCADO;ORDER BY producto.CANTIDADVENDIDA DESC LIMIT 5", function (err, result, fields) { // se envía la petición a DB
+      if (err) throw err; // valida peticion enviada corrrectamente
+      res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
+    });
+  });
+});
+
+
+app.get('/getProductosMasBuscadosByUser', (req, res) => { // Busca los productos mas buscados por un usuario especifico
+  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+  var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+  let idUsuario = req.query.idUsuario;
+  con.connect(function (err) {// se abre la coneccion con la BD
+    if (err) throw err; // validacion de apertura
+    con.query("SELECT producto.NOMBREPRODUCTO,historial.FECHABUSQUEDA FROM historial LEFT JOIN producto ON historial.IDPRODUCTO = producto.IDPRODUCTO WHERE usuario.IDUSUARIO = ?;",idUsuario, function (err, result, fields) { // se envía la petición a DB
+      if (err) throw err; // valida peticion enviada corrrectamente
+      res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
+    });
+  });
+});
+
+
+app.get('/getProductosMasBuscados', (req, res) => { // Busca los productos mas buscados por los usuarios
+  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+  var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+  let idUsuario = req.query.idUsuario;
+  con.connect(function (err) {// se abre la coneccion con la BD
+    if (err) throw err; // validacion de apertura
+    con.query("SELECT producto.NOMBREPRODUCTO,COUNT(historial.IDPRODUCTO) as cantidad FROM historial JOIN producto ON producto.IDPRODUCTO = historial.IDPRODUCTO GROUP BY historial.IDPRODUCTO ORDER BY COUNT(historial.IDPRODUCTO) DESC limit 5;", function (err, result, fields) { // se envía la petición a DB
+      if (err) throw err; // valida peticion enviada corrrectamente
+      res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
+    });
+  });
+});
+
 
 //deleteFromUserHistory: obtiene todos los productos del historial de un cliente, es necesario pasarle idUsuario: int  
 //ejemplo de llamada:  http://localhost:5000/deleteFromUserHistory?idBusqueda=2
