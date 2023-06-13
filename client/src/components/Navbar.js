@@ -112,7 +112,7 @@ function Navbar() {
       <div id="menu-hambur" className={`categorias ${clicked ? 'active' : '' }`}>
           <ul><Link to="/nuevaLista">Lista de compras</Link></ul>
           <ul><Link to="/estadisticas">Estadisticas</Link></ul>
-          <ul>Historial</ul>
+          <ul><Link to="/historial">Historial</Link></ul>
           <hr></hr>
           <li> Mercado </li>
           <li> Lacteos </li>

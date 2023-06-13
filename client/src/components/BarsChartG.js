@@ -34,27 +34,47 @@ var misoptions = {
         }
     },
     scales : {
-        y : {
+        /*y : {
             min : 0,
             max : 100
-        },
+        },*/
         x: {
             ticks: { color: 'rgba(0, 220, 195)'}
         }
     }
 };
 
-var midata = {
-    labels: meses,
-    datasets: [
-        {
-            label: 'Beneficios',
-            data: beneficios,
-            backgroundColor: 'rgba(0, 220, 195, 0.5)'
-        }
-    ]
-};
+function agruparElementos(arreglo) {
+    const resultado = {};
 
-export default function Bars() {
+    arreglo.forEach((elemento) => {
+        for (const key in elemento) {
+            if (elemento.hasOwnProperty(key)) {
+                if (resultado.hasOwnProperty(key)) {
+                    resultado[key].push(elemento[key]);
+                } else {
+                    resultado[key] = [elemento[key]];
+                }
+            }
+        }
+    });
+
+    return resultado;
+}
+
+export default function Bars(props) {
+    console.log(props.data)
+    let formatedData = agruparElementos(props.data)
+
+    var midata = {
+        labels: formatedData.NOMBREPRODUCTO,
+        datasets: [
+            {
+                label: 'Beneficios',
+                data: formatedData.cantidad,
+                backgroundColor: 'rgba(0, 220, 195, 0.5)'
+            }
+        ]
+    };
     return <Bar data={midata} options={misoptions} />
 }
