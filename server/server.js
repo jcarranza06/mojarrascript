@@ -506,6 +506,18 @@ app.get('/getUserHistory', (req, res) => {
   });
 });
 
+app.get('/getProductosFromUserHistory', (req, res) => {
+  var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
+  var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
+  let idUsuario = req.query.idUsuario;
+  con.connect(function (err) {// se abre la coneccion con la BD
+    if (err) throw err; // validacion de apertura
+    con.query("SELECT Count(P.IDPRODUCTO) as CANTIDAD ,P.NOMBREPRODUCTO, P.IDPRODUCTO, P.IDSUPERMERCADO, P.PRECIOPRODUCTO, S.LOGOSUPERMERCADO FROM historial AS L JOIN PRODUCTO AS P ON L.IDPRODUCTO = P.IDPRODUCTO JOIN SUPERMERCADO AS S ON P.IDSUPERMERCADO = S.IDSUPERMERCADO GROUP BY P.IDPRODUCTO where L.IDUSUARIO=?;", [idUsuario], function (err, result, fields) { // se envía la petición a DB
+      if (err) throw err; // valida peticion enviada corrrectamente
+      res.send(JSON.stringify(result)); // se imprime en pantalla el resultado de la consulta
+    });
+  });
+});
 app.get('/getNombreProductosMasVendidos', (req, res) => {// devuelve los 5 productos mas vendidos
   var conn = require('./DBConection.js'); // !!INCLUIR SIEMPRE!!  se incluye archivo DBConection.js
   var con = conn.con(); // se llama la funcion createConection(), se almacena en con, esta es una variable para realizar la conección, no es la coneccion ni realiza consultas
