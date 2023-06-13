@@ -8,7 +8,7 @@ module.exports = {
         const cedentialsBD = {
             host: "localhost", 
             user: "root",
-            password: "123456789",
+            password: "Ldsm1050610",
             database: "mojarradb"
 
           }
