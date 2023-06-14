@@ -12,8 +12,17 @@ left: 0em;
 background: linear-gradient(90deg, #8C43E6 0%, #EF8D6D 100%); 
 }
 
+.footer-contenedor{
+    display: flex;
+}
+
+.contenedor{
+    padding-left: 3rem;
+}
+
+
 .footer-t{
-    font-size: 1.4em;
+    font-size: 1rem;
     margin-top: 1em;
     margin-left: 1em;
     margin-right: 1em;
@@ -60,10 +69,13 @@ background: linear-gradient(90deg, #8C43E6 0%, #EF8D6D 100%);
 .mojarralogo{
     background-image:url("../Iconos/Mojarra.png");
     background-repeat:no-repeat ;
-    background-size: 24em;
+    background-size: 15rem;
     width: 24em;
     height: 8em;
     bottom:0;
+    right: 0;
+    align-items: end;
+    margin-right: 5rem;
    
 }
 
@@ -77,6 +89,6 @@ background: linear-gradient(90deg, #8C43E6 0%, #EF8D6D 100%);
     padding: 0em;
     place-content: center;
     cursor: pointer;
+    background-size: 1rem;
 }
-
 

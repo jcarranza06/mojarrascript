@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import "../stylesheets/DialogListas.css";
 
 function DialogListas(props) {
     const listas = [
@@ -75,7 +76,7 @@ function DialogListas(props) {
     return (
         <div>
             <dialog open={props.estadoDialog}>
-                <div>
+                <div className='cuadro'>
                     {
                         listasUsuario.map((lista, indice) => {
                             return (
@@ -92,10 +93,10 @@ function DialogListas(props) {
                 </div>
                 <div>
                     <button onClick={() =>(addElementoToList())}>
-                        agregar
+                        Agregar
                     </button>
                     <button onClick={() => (props.changeEstadoDialog())}>
-                        cerrar
+                        Cerrar
                     </button>
                 </div>
             </dialog>

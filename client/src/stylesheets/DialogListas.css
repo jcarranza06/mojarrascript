@@ -1,0 +1,29 @@
+dialog{
+    margin-top: 5rem;
+    z-index: 2;
+    border: 0;
+    background: linear-gradient(90deg, #8C43E6 0%, #EF8D6D 100%);
+    border-radius: 10px;
+}
+
+span{
+    color: white;
+    
+}
+.cuadro {
+    width: auto;
+    height: auto;
+    border-width: 0;
+    border: 0;
+}
+
+button{
+    margin-top: 1rem;
+    margin-left: 2rem;
+    background-color: wheat;
+    border: 0;
+    border-radius: 20px;
+    padding: 0.7rem;
+    cursor: pointer;
+    font-weight: 100;
+}
