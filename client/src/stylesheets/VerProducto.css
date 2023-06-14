@@ -62,6 +62,12 @@ h3 {
     margin: 5px;
     flex-wrap: wrap;
     align-items: center;
+    margin-left: 1rem;
+    margin-top: 1rem;
+}
+
+.btnOpcionProducto:hover {
+    transform: scale(1.15);
 }
 
 .comentariosContainer {
