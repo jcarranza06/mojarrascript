@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { useParams } from "react-router-dom";
 import "../stylesheets/ListasProducto.css";
+
 function ListaProductos() {
   // Lógica para obtener los productos de la lista con el ID `listaId`
   // Puedes utilizar el ID para hacer una solicitud a la API o buscar los productos en alguna fuente de datos
@@ -8,12 +9,41 @@ function ListaProductos() {
   const {id}  = useParams();
   const [producto, setProducto] = useState([{"IDPRODUCTO":0,"NOMBREPRODUCTO":"","PRECIOPRODUCTO":"","LOGOSUPERMERCADO":""}]);
   let PrecioTotal=0;
-  let ahorroTotal=0;
+  const [ahorroTotal, setAhorroTotal] = useState(0);
   useEffect(() => {
     
     getProductosLista();  
     
   }, []);
+
+  const setAhorro = (productos) => {
+    console.log('setando', productos)
+    productos.map((producto)=>{
+      console.log(producto.IDPRODUCTO)
+      getAhorroProducto(producto.IDPRODUCTO);
+    })
+  }
+
+  const getAhorroProducto = (id)=> {
+    const options = {
+      method: "GET",
+    };
+
+    // Petición HTTP, consulta la API y devuelve el cuerpo
+    let rui = "http://localhost:5000/getAhorro/"+id;
+    let url = new URL(rui);
+    fetch(url, options) // se hace la consulta 
+        .then(response => response.text()) // se obtiene el cuerpo de la respuesta
+        .then(data => {
+            const json = JSON.parse(data);// se pasa la respuesta de string json a objeto de javascript
+            console.log(json);
+            setAhorroTotal(ahorroTotal + json.ahorro);
+        })
+      .catch((error) => {
+        console.error("Error al obtener las listas:", error);
+      });
+  }
+
   function getProductosLista(){
     const options = {
         method: "GET",
@@ -30,7 +60,7 @@ function ListaProductos() {
               const producto = json.map(json => json);
               console.log( producto);
               setProducto(producto);
-              
+              setAhorro(producto)
           })
         .catch((error) => {
           console.error("Error al obtener las listas:", error);

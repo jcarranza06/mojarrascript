@@ -8,10 +8,10 @@ function Historial() {
   const {nombreLista}  = useParams();
   const { user, isAuthenticated, loginWithRedirect } = useAuth0()
   const [id, setId]  = useState(0);
+  const [ahorroTotal, setAhorroTotal] = useState(0);
   //let id  = 35;
   const [producto, setProducto] = useState([{"CANTIDAD":0,"IDPRODUCTO":0,"NOMBREPRODUCTO":"","PRECIOPRODUCTO":"","LOGOSUPERMERCADO":""}]);
   let PrecioTotal=0;
-  let ahorroTotal=0;
   useEffect(() => {
     if(isAuthenticated){
       getUserId(user);
@@ -19,6 +19,34 @@ function Historial() {
       loginWithRedirect();
     }
   }, []);
+
+  const setAhorro = (productos) => {
+    console.log('setando', productos)
+    productos.map((producto)=>{
+      console.log(producto.IDPRODUCTO)
+      getAhorroProducto(producto.IDPRODUCTO);
+    })
+  }
+
+  const getAhorroProducto = (id)=> {
+    const options = {
+      method: "GET",
+    };
+
+    // Petición HTTP, consulta la API y devuelve el cuerpo
+    let rui = "http://localhost:5000/getAhorro/"+id;
+    let url = new URL(rui);
+    fetch(url, options) // se hace la consulta 
+        .then(response => response.text()) // se obtiene el cuerpo de la respuesta
+        .then(data => {
+            const json = JSON.parse(data);// se pasa la respuesta de string json a objeto de javascript
+            console.log(json);
+            setAhorroTotal(ahorroTotal + json.ahorro);
+        })
+      .catch((error) => {
+        console.error("Error al obtener las listas:", error);
+      });
+  }
 
   function getUserId(user) {
     // configuracion para la petición
@@ -54,9 +82,9 @@ function Historial() {
               const json = JSON.parse(data);// se pasa la respuesta de string json a objeto de javascript
               console.log(json);
               const producto = json.map(json => json);
-              console.log( producto);
+              console.log("prods", producto);
               setProducto(producto);
-              
+              setAhorro(producto);
           })
         .catch((error) => {
           console.error("Error al obtener historial:", error);
