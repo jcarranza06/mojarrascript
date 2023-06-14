@@ -12,6 +12,8 @@
 }
 
 
+
+
 .horizontalCardContainer.mas {
     text-align: center;
     margin-left: 10px;
@@ -34,6 +36,11 @@
     margin: 0;
     padding: 0;
     place-content: center;
+}
+
+.horizontalCardContainerOfertas > a > .card {
+    
+    height: 260px;
 }
 
 h1 {
@@ -74,7 +81,7 @@ h1 {
 }
 
 .map {
-    min-height: 350px;
+    min-height: 35rem;
 }
 
 .home {
@@ -93,6 +100,9 @@ h1 {
 .card {
     float: left;
     cursor: pointer;
+    width: auto;
+    height: auto;
+    padding: 1rem;
 }
 
 .card:hover{
@@ -159,6 +169,7 @@ h1 {
 }
 .card.producto img{
     max-width: 100px;
+    max-height: 150px;
 }
 
 .card.producto button {
@@ -174,6 +185,10 @@ h1 {
     padding-left: 0.5em;
     padding-right: 0.5em;
     border-width: 0px;
+    width: 100px;
+    height: 30px;
+    align-items: center;
+    padding: 0.5rem;
 }
 
 .inputProductosCerca {
