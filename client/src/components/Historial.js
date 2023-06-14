@@ -101,7 +101,7 @@ function Historial() {
           let precioSinDecimales = parseInt(precio.toFixed(2));
           PrecioTotal+=precioSinDecimales;
           let cantidad = Number(product.CANTIDAD);
-          if (cantidad<2) {
+          if (cantidad>1) {
             return(
                 <div key={product.id} className ='producto-card' >
                   <p className ='varios'>x{cantidad}</p>

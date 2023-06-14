@@ -86,7 +86,7 @@ function PreProducto() {
           <div className={'optionOrdenFiltro '+opcionesOrden[2]} onClick={()=>chooseOrden(2)}>Menor precio</div>
         </div>
         <div>
-          <button onClick={() => filtrarBusqueda()}>Filtar</button>
+          <button onClick={() => filtrarBusqueda()}>Filtrar</button>
         </div>
       </div>
 

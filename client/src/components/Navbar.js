@@ -113,15 +113,7 @@ function Navbar() {
           <ul><Link to="/nuevaLista">Lista de compras</Link></ul>
           <ul><Link to="/estadisticas">Estadisticas</Link></ul>
           <ul><Link to="/historial">Historial</Link></ul>
-          <hr></hr>
-          <li> Mercado </li>
-          <li> Lacteos </li>
-          <li> Despensa </li>
-          <li> Frutas y verduras </li>
-          <li> Licores </li>
-          <li> Bebidas </li>
-          <li> Panaderia </li>
-          <li> Carnes </li>
+          
       </div>
       <div className={`bgMenu ${clicked ? 'active' : '' }`} onClick={handleClick}></div>
 
