@@ -114,6 +114,10 @@ h3 {
     display: flex;
 }
 
+dialog {
+    position: fixed;
+    top: 50%;
+}
 
 @media (max-width: 767px) {
     .row-inline-2 {

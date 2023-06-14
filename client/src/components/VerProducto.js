@@ -182,10 +182,10 @@ function VerProducto() {
                         <h3>{producto.nombre}</h3>
                         <div>
                             <p>
-                                <b>precioRegular: ${producto.precio}</b>
+                                <b>Precio Regular: ${producto.precio}</b>
                             </p>
                             {
-                                producto.descuento != null ? (<p><b>precioAhora: ${producto.descuento}</b></p>) : (<p></p>)
+                                producto.descuento != null ? (<p><b>Precio Ahora: ${producto.descuento}</b></p>) : (<p></p>)
                             }
 
                         </div>

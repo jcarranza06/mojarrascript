@@ -103,18 +103,18 @@ const Estadisticas = () => {
             <p>Conoce las estadisticas respecto a los productos mas comprados, almacenes favoritos y ahorro total que se ha tenido mes a mes, tanto de todos los usuarios que utilizan mojarra price, como los tuyos. </p>
             <h1>Total de ahorro personal: <span className="green-dollar">$</span>{ahorroUsuario}</h1>
             {/* Aquí incluiré las gráficas (un componente por cada ejemplo). */}
-            <div>
+            {false && <div>
                 <p className="m-2"><b>Ahorro </b><span className="green-dollar">$</span></p>
                 <div className="chart" style={{width:"450px", height:"230px"}}>
                     <LinesChart />
                 </div>
-            </div>
+            </div>}
                 <p className="m-2"><b>Productos más comprados</b><span className="yellow-star">&#11088;</span></p>
                 <div className="bars-chart">
-                    <div className='bar-1' >
+                    {false && <div className='bar-1' >
                         <div className="box">USUARIO</div>
                         <BarsChart />                       
-                    </div>
+                    </div>}
                     <div  className='bar-2'>
                         <div className="box">GLOBAL</div>
                         {isProductosMasComprados && <BarsChartG data={productosMasComprados}/>                       }
