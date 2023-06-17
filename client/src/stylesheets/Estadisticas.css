@@ -1,0 +1,72 @@
+/* Estilos generales */
+
+
+/* Estilos para centrar elementos */
+.statistics-page {
+  justify-content: left;
+  margin-right: 5vw;
+  margin-left: 5vw;
+  
+}
+
+/* Estilos adicionales para elementos específicos */
+h1 {
+  font-size: 2rem;
+}
+
+p {
+  font-size: 1.2rem;
+}
+
+.green-dollar {
+  color: green;
+}
+
+.yellow-star {
+  color: yellow;
+  font-size: 1.2em;
+  margin-left: 5px;
+}
+
+.chart {
+  max-width: 90vw;
+}
+.bars-chart{
+  display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+}
+.bar-1, .bar-2
+{
+  max-width: 90vw;
+  width: 400px;
+  
+}
+.pies-chart{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.pies-1, .pies-2
+{
+  max-width: 90vw;
+  width: 300px;
+  height: 300px;
+  margin-bottom: 50px;
+}
+.contenedor{
+}
+.contenedor-productos-comprados{
+}
+.box {
+  width: 57px;
+  height: 12px;
+  border: 10px solid;
+  border-radius: 50px;
+  border-image: linear-gradient(to bottom, purple, pink) 1;
+  padding: 1px;
+  color: linear-gradient(to bottom, purple, pink) 1;;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+}

@@ -1,94 +1,130 @@
-import React from 'react'
+// le agregué hooks useState y useEffect
+import React, { useState, useEffect } from 'react';
+import MapContainer from './MapContainer.js';
 
 import "../stylesheets/Home.css"; // import your navbar styles
+import prev from "../Iconos/Icons/prev.png";
+import next from "../Iconos/Icons/next.png";
+import CardProducto from './CardProducto.js';
+/*import {
+    useNavigate
+} from "react-router-dom";*/
 
 const iconosFolder = require.context("../Iconos", true)
-const iconos = [ 
+
+const iconos = [
     {
         name: 'Mercado',
         img: './image 134.svg'
     },
     {
-        name: 'Tecnologia',
-        img: './pc 1.svg'
+        name: 'Lacteos',
+        img: './leche.png'
     },
     {
-        name: 'Deporte',
-        img: './voley 1.svg'
+        name: 'Despensa',
+        img: './despensa.png'
     },
     {
-        name: 'Electro y Cocina',
-        img: './electro 1.svg'
+        name: 'Frutas y verduras',
+        img: './tomate.png'
     },
     {
-        name: 'Muebles',
-        img: './mueble 1.svg'
+        name: 'Licores',
+        img: './licor.png'
     },
     {
-        name: 'Bebes y Niños',
-        img: './bebe 1.svg'
+        name: 'Bebidas',
+        img: './bebida.png'
     },
     {
-        name: 'Mascotas',
-        img: './perro 1.svg'
+        name: 'Panaderia',
+        img: './pan.png'
     },
     {
-        name: 'Automobil',
-        img: './carro 1.svg'
+        name: 'Carnes',
+        img: './carne.png'
     },
 
-]
-//datasets de prueba
-let productosMasComprados = [
-    {
-        name: 'televisor',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },
-    {
-        name: 'televisor',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },
-    {
-        name: 'televisor',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    }
-]
+];
 
-let productosEnOferta = [
-    {
-        name: 'televisor',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },
-    {
-        name: 'televisor',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    },
-    {
-        name: 'televisor',
-        img: './image 154.png',
-        market: './image 113.png',
-        price: 154000
-    }
-]
+//getProductosEnOferta();
 
 function addStylesheet(url) {
     const link = document.createElement('link');
     link.href = url;
     link.rel = 'stylesheet';
     document.head.appendChild(link);
-  }
+}
 
 function Home() {
+
+    // PRODUCTOS EN OFERTA
+    const [productosEnOferta, setProductosEnOferta] = useState([]);
+    function getProductosEnOferta() {
+        // configuracion para la petición
+        const options = {
+            method: "GET"
+        };
+
+
+        // Petición HTTP, consulta api y devuelve el body 
+        let url = new URL("http://localhost:5000/getProductosEnOferta");
+        fetch(url, options) // se hace la consulta 
+            .then(response => response.text()) // se obtiene el cuerpo de la respuesta
+            .then(data => {
+                const json = JSON.parse(data);// se pasa la respuesta de string json a objeto de javascript
+                console.log(json);
+                setProductosEnOferta(json); // funcion del useState
+            });
+    }
+
+    // PRODUCTOS MÁS VENDIDOS
+    const [productosMasVendidos, setProductosMasVendidos] = useState([]);
+    function getProductosMasVendidos() {
+        const options = {
+            method: "GET"
+        };
+
+        // Petición HTTP, consulta api y devuelve el body 
+        let url = new URL("http://localhost:5000/getProductosMasVendidos");
+        fetch(url, options) // se hace la consulta 
+            .then(response => response.text()) // se obtiene el cuerpo de la respuesta
+            .then(data => {
+                const json = JSON.parse(data);// se pasa la respuesta de string json a objeto de javascript
+                console.log(json);
+                setProductosMasVendidos(json); // funcion del useState
+            });
+    }
+
+    // se usa useEffect((),[]) sin parametros para solo hacer una vez la consulta a la BD, no se debe hacer cada vez que se renderice
+    useEffect(() => {
+        
+        getProductosEnOferta();
+    }, []);
+    //setProductosEnOferta(prods);
+
+    useEffect(() => {
+        getProductosMasVendidos();
+    }, []);
+
+
+    const [scrollAmount, setScrollAmount] = useState(-700);
+
+    const handleScroll = (scrollOffset) => {
+        const container = document.querySelector('.horizontalCardContainer.mas');
+        const newScrollAmount = scrollAmount + scrollOffset;
+        container.scrollLeft = newScrollAmount;
+        setScrollAmount(newScrollAmount);
+
+    };
+
+    //const navigate = useNavigate();
+
+    /*const toProducto = (id) => {
+        navigate('/producto', { state: { idProducto: id } });
+    }*/
+
     return (
         <div className="home">
             {addStylesheet("https://fonts.googleapis.com/css2?family=Inter:wght@100&display=swap")}
@@ -108,53 +144,47 @@ function Home() {
                 </div>
 
                 <div className="row-inline-2">
-                    <div className="mapsContainer">
-                        <iframe
-                            title="Ubicacion de usuario"
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d248.54949968614653!2d-74.08205488257842!3d4.631165082134345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9bd4d69adbbb%3A0x43b3f4913d00eb9a!2sPUNTO%202!5e0!3m2!1ses!2sco!4v1681592970729!5m2!1ses!2sco"
-                            style={{ width: '100%', height: 'auto', border: '0' }} allowFullScreen="" loading="lazy"
-                            referrerPolicy="no-referrer-when-downgrade"></iframe>
+                    <div className="map">
+                        <MapContainer />
                     </div>
                     <div className="rowElementContainer">
-                        <h3>Busca Productos cerca de ti</h3>
+                        <h1>Busca Productos cerca de ti</h1>
                         <div>
-                            <input type="text" placeholder="     ¿Qué estás buscando?" id="name" name="name" required minLength="4" maxLength="8" size="auto"></input>
+                            <input className='inputProductosCerca' type="text" placeholder="       ¿Qué lugar estás buscando?" id="name" name="name" required minLength="4" maxLength="8" size="auto"></input>
                         </div>
 
-                        <h3>Lo más comprado</h3>
-                        <div className="horizontalCardContainer">
-                            {
-                                productosMasComprados.map((producto, indice) => {
-                                    return (
-                                        <div className="card producto" key={indice}>
-                                            <img src={iconosFolder(producto.img)} alt=""></img>
-                                            {producto.name}
-                                            <img src={iconosFolder(producto.market)} alt=""></img>
-                                            <button>
-                                                $ {producto.price}
-                                            </button>
-                                        </div>
-                                    );
-                                })
-                            }
+                        <h1>Lo más comprado</h1>
+                        <div className='productosMasComprados'>
+                            <img onClick={() => handleScroll(-300)} className='imagenPrev' src={prev} alt="flecha correr hacia atras" width="20rem" height="20rem" />
+                            <div className="horizontalCardContainer mas" style={{ overflowX: 'scroll'}}>
+                                {
+                                    (productosMasVendidos === 0 ? (
+                                        <p>Cargando ...</p> // en caso que no haya cargado 
+                                    ) : (
+                                        productosMasVendidos.map((producto, indice) => // se recorre el arreglo para mostrar los elementos
+                                        (
+                                            <CardProducto key={indice} producto={producto} />    
+                                        )
+                                        )
+                                    ))
+                                }
+                            </div>
+                            <img onClick={() => handleScroll(300)} className='imagenPrev' src={next} alt="flecha correr hacia adelante" width="20rem" height="20rem" />
                         </div>
                     </div>
                 </div>
-                <h2>Ofertas</h2>
-                <div className="horizontalCardContainer">
+                <h1>Ofertas</h1>
+                <div className="horizontalCardContainerOfertas">
                     {
-                        productosEnOferta.map((producto, indice) => {
-                            return (
-                                <div className="card producto" key={indice}>
-                                    <img src={iconosFolder(producto.img)} alt=""></img>
-                                    {producto.name}
-                                    <img src={iconosFolder(producto.market)} alt=""></img>
-                                    <button>
-                                        $ {producto.price}
-                                    </button>
-                                </div>
-                            );
-                        })
+                        (productosEnOferta === 0 ? (
+                            <p>Cargando ...</p> // en caso que no haya cargado 
+                        ) : (
+                            productosEnOferta.map((producto, indice) => // se recorre el arreglo para mostrar los elementos
+                            (
+                                <CardProducto key={indice} producto={producto} />
+                            )
+                            )
+                        ))
                     }
                 </div>
             </div>

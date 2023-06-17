@@ -1,0 +1,130 @@
+.componentContainer * {
+    font-family: 'Inter', 'sans-serif';
+    font-style: normal;
+    /* or 40% */
+
+    font-feature-settings: 'salt' on, 'liga' off;
+    font-weight: bold;
+    color: #000000;
+}
+
+h3 {
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.mapsContainer iframe {
+    min-height: auto;
+}
+
+.componentContainer {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+    background: #E5E5E5;
+    font-weight: bold;
+    color: white;
+}
+
+.contenido {
+    width: 85%;
+}
+
+.row-inline-2 {
+    display: flex;
+}
+
+.row-inline-2>div {
+    width: 50%;
+    margin: 20px;
+    min-width: 300px;
+}
+
+.productImageContainer {
+    display: flex;
+    align-items: center;
+}
+
+.productImageContainer img {
+    width: 100%;
+}
+
+.btnOpcionProducto {
+    display: flex;
+    padding: 5px;
+    gap: 10px;
+    background: linear-gradient(90deg, #8C43E6 0%, #EF8D6D 100%);
+    border: 0px;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 5px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-left: 1rem;
+    margin-top: 1rem;
+}
+
+.btnOpcionProducto:hover {
+    transform: scale(1.15);
+}
+
+.comentariosContainer {
+    box-sizing: border-box;
+    background: #FFFFFF;
+    border: 1.5px solid #000000;
+    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    padding: 20px;
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+.comentario {
+    display: flex;
+    background: #FFFFFF;
+    border: 2px solid #000000;
+    padding: 10px;
+    gap: 10px;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+.comentario .comentarioImg {
+    display: flex;
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    overflow: hidden;
+    /* max-height: 50px; */
+    align-content: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+}
+
+.comentario .comentarioImg img {
+    width: 100%;
+}
+
+.comentariosContainer .comentarioWRiting {
+    width: 100%;
+}
+
+.btnsOptionsVerProducto {
+    display: flex;
+}
+
+dialog {
+    position: fixed;
+    top: 50%;
+}
+
+@media (max-width: 767px) {
+    .row-inline-2 {
+        display: inline;
+    }
+
+    .row-inline-2>div {
+        width: 100%;
+    }
+}
