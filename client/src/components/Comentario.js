@@ -7,11 +7,18 @@ function Comentario(props) {
     return (
         <div className="comentario">
             <div className="comentarioImg">
-            <img src={iconosFolder(props.img)} alt="imagen producto"></img>
+                <img src={props.comment.FOTOUSUARIO} alt="imagen producto"></img>
             </div>
-            <div className="comentarioStr">
-                {props.text}
+            <div style={{width: '100%'}}>
+                <div style={{width: '100%', display: 'flex', justifyContent: 'space-around'}}>
+                    <div>{props.comment.NOMBREUSUARIO}</div>
+                    <div>{props.comment.FECHACOMENTARIO}</div>
+                </div>
+                <div className="comentarioStr">
+                    {props.comment.COMENTARIO}
+                </div>
             </div>
+
         </div>
     );
 }

@@ -53,7 +53,7 @@ function PreProducto() {
   }
 
   const filtrarBusqueda = (event) => {
-    if (minPrice!= "" && maxPrice!= "") {
+    if (minPrice!== "" && maxPrice!== "") {
       // 👇 Get input value
       console.log(minPrice + " - - " + maxPrice);
       getSearching(1);
@@ -62,9 +62,9 @@ function PreProducto() {
 
   const chooseOrden = (int) => {
     setSelectOrden(int);
-    if(int == 0){
+    if(int === 0){
       setopcionesOrden(['main', '', '']);
-    }else if (int==1){
+    }else if (int===1){
       setopcionesOrden(['', 'main', '']);
     }else {
       setopcionesOrden(['', '', 'main']);
@@ -86,7 +86,7 @@ function PreProducto() {
           <div className={'optionOrdenFiltro '+opcionesOrden[2]} onClick={()=>chooseOrden(2)}>Menor precio</div>
         </div>
         <div>
-          <button onClick={() => filtrarBusqueda()}>Filtar</button>
+          <button onClick={() => filtrarBusqueda()}>Filtrar</button>
         </div>
       </div>
 
